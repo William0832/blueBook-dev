@@ -59,31 +59,38 @@ import DialogNodeAddBtns from './DialogNodeAddBtns'
 //   )
 // }
 
-function SwitchLabels ({ label, value, setValue }) {
-  return (
-    <FormGroup>
-      <FormControlLabel
-        control={
-          <Switch
-            color="error"
-            checked={value}
-            onChange={() => setValue(ov => !ov)}
-          />
-        }
-        label={label} />
-    </FormGroup>
-  );
-}
+// function SwitchLabels ({ label, value, setValue }) {
+//   return (
+//     <FormGroup>
+//       <FormControlLabel
+//         control={
+//           <Switch
+//             color="error"
+//             checked={value}
+//             onChange={() => setValue(ov => !ov)}
+//           />
+//         }
+//         label={label} />
+//     </FormGroup>
+//   );
+// }
+
 export default function NodeDialog ({ open, setOpen, category, createNode }) {
   const [name, setName] = useState('')
   const [target, setTarget] = useState()
-  const [isAlert, setIsAlert] = useState(false)
+
   useEffect(() => {
     if (open === false) {
-      setIsAlert(() => false)
+      setName(() => '')
       setTarget(() => null)
     }
   }, [open])
+
+  useEffect(() => {
+    if (target) {
+      setName((oldName) => target.objectName)
+    }
+  }, [target])
   const handleClose = () => {
     setOpen(false)
   }
@@ -97,7 +104,7 @@ export default function NodeDialog ({ open, setOpen, category, createNode }) {
       alert('Plz select target!')
       return
     }
-    createNode({ category, name, target, isAlert })
+    createNode({ category, name, target, isAlert: false })
     setOpen(false)
   }
 
@@ -113,13 +120,6 @@ export default function NodeDialog ({ open, setOpen, category, createNode }) {
 
         <DialogContent>
           <Stack spacing={3}>
-            <TextField
-              id="name"
-              label="name"
-              variant="standard"
-              placeholder="Enter node name"
-              onChange={(evt) => { setName(evt.target.value) }} />
-            <SwitchLabels label={'Alert'} value={isAlert} setValue={setIsAlert} />
             <Box>
               <p className="mb-2">選擇設備：</p>
               {!!category?.objectList &&
@@ -130,6 +130,13 @@ export default function NodeDialog ({ open, setOpen, category, createNode }) {
                 />
               }
             </Box>
+            <TextField
+              id="name"
+              label="設備名稱"
+              variant="standard"
+              placeholder="Enter node name"
+              value={name}
+              onChange={(evt) => { setName(evt.target.value) }} />
           </Stack>
         </DialogContent>
 
