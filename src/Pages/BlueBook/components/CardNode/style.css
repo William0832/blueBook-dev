@@ -1,0 +1,50 @@
+:root {
+  --bg-color: #1F2937;
+  --primary-color: #42A5F5;
+  --badge-size: 30px;
+  --node-border-radius: 10px;
+  --handel-size: 10px;
+}
+
+.react-flow__node-card  {
+  display: flex;
+  border-radius: var(--node-border-radius);
+}
+
+.react-flow__node-card.selected{
+  box-shadow: 0 0 0 4px var(--primary-color);
+}
+
+.react-flow__node-card:hover {
+  box-shadow: 
+    0px 0px 200px  var(--primary-color),
+    0 0 0 4px var(--primary-color);
+}
+
+.react-flow__node-card .MuiPaper-root {
+  border: 0;
+  box-shadow: none;
+  border-radius: var(--node-border-radius);
+  background-color: var(--bg-color);
+  color: #fff;
+}
+
+
+.react-flow__node-card .MuiBadge-badge {
+  width: var(--badge-size);
+  height: var(--badge-size);
+  border-radius: 50%;
+}
+
+
+/* handle */
+.react-flow__node-card .react-flow__handle {
+  opacity: 0;
+  background: #fff;
+  width: var(--handel-size);
+  height: var(--handel-size);
+}
+
+.react-flow__node-card:hover .react-flow__handle {
+  opacity: 1;
+}

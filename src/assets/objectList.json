@@ -1,0 +1,487 @@
+{
+    "success": true,
+    "message": "success",
+    "data": {
+        "categories": [
+            {
+                "categoryId": 1,
+                "categoryName": "物料供應設備",
+                "categoryNameEN": "Material Supplier",
+                "objectList": [
+                    {
+                        "objectId": 1,
+                        "objectName": "化學槽車",
+                        "objectType": "equipment",
+                        "objectNameEN": "Chemical Lorry",
+                        "objectImage": "chemical_lorry.png",
+                        "objectImageAlarm": "chemical_lorry_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 2,
+                        "objectName": "原物料桶槽",
+                        "objectType": "equipment",
+                        "objectNameEN": "Material Drum",
+                        "objectImage": "material_drum.png",
+                        "objectImageAlarm": "material_drum_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 3,
+                        "objectName": "庫房",
+                        "objectType": "facility",
+                        "objectNameEN": "warehouse",
+                        "objectImage": "warehouse.png",
+                        "objectImageAlarm": "warehouse_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 4,
+                        "objectName": "供料機台",
+                        "objectType": "equipment",
+                        "objectNameEN": "Supplier Tool",
+                        "objectImage": "supplier_tool.png",
+                        "objectImageAlarm": "supplier_tool_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 5,
+                        "objectName": "分流閥",
+                        "objectType": "facility",
+                        "objectNameEN": "valve_box",
+                        "objectImage": "valve_box.png",
+                        "objectImageAlarm": "valve_box.png"
+                    }
+                ]
+            },
+            {
+                "categoryId": 2,
+                "categoryName": "生產機台",
+                "categoryNameEN": "Manufacturing Equipment",
+                "objectList": [
+                    {
+                        "objectId": 6,
+                        "objectName": "生產機台A",
+                        "objectType": "equipment",
+                        "objectNameEN": "Equipment",
+                        "objectImage": "equipment_type_1.png",
+                        "objectImageAlarm": "equipment_type_1_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 7,
+                        "objectName": "生產機台B",
+                        "objectType": "equipment",
+                        "objectNameEN": "Material Drum",
+                        "objectImage": "equipment_type_2.png",
+                        "objectImageAlarm": "equipment_type_2_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 8,
+                        "objectName": "生產機台C",
+                        "objectType": "facility",
+                        "objectNameEN": "warehouse",
+                        "objectImage": "equipment_type_3.png",
+                        "objectImageAlarm": "equipment_type_3.png"
+                    }
+                ]
+            },
+            {
+                "categoryId": 3,
+                "categoryName": "電力設備相關",
+                "categoryNameEN": "Power Supplier",
+                "objectList": [
+                    {
+                        "objectId": 9,
+                        "objectName": "第一變電所",
+                        "objectType": "faclity",
+                        "objectNameEN": "",
+                        "objectImage": "energy_level_1.png",
+                        "objectImageAlarm": "energy_level_1_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 10,
+                        "objectName": "第二變電所",
+                        "objectType": "faclity",
+                        "objectNameEN": "",
+                        "objectImage": "energy_level_2.png",
+                        "objectImageAlarm": "energy_level_2_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 11,
+                        "objectName": "變壓器",
+                        "objectType": "faclity",
+                        "objectNameEN": "Adapter",
+                        "objectImage": "adapter_type_1.png",
+                        "objectImageAlarm": "adapter_type_1_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 12,
+                        "objectName": "變壓器",
+                        "objectType": "faclity",
+                        "objectNameEN": "Adapter",
+                        "objectImage": "adapter_type_2.png",
+                        "objectImageAlarm": "adapter_type_2_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 13,
+                        "objectName": "UPS",
+                        "objectType": "faclity",
+                        "objectNameEN": "UPS",
+                        "objectImage": "ups.png",
+                        "objectImageAlarm": "ups_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 14,
+                        "objectName": "配電箱",
+                        "objectType": "faclity",
+                        "objectNameEN": "Distribution Box",
+                        "objectImage": "distribution_box.png",
+                        "objectImageAlarm": "distribution_box_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    },
+                    {
+                        "objectId": 15,
+                        "objectName": "插座",
+                        "objectType": "faclity",
+                        "objectNameEN": "Socket",
+                        "objectImage": "socket_type_1.png",
+                        "objectImageAlarm": "socket_type_1_alarm.png",
+                        "metadata": [
+                            {
+                                "itemName": "ID",
+                                "itemValue": "XXXXXX"
+                            },
+                            {
+                                "itemName": "名稱",
+                                "itemValue": "物件名稱"
+                            },
+                            {
+                                "itemName": "負責人",
+                                "itemValue": "@jayhuang"
+                            },
+                            {
+                                "itemName": "機台/設備製造商",
+                                "itemValue": "廠牌名稱"
+                            },
+                            {
+                                "itemName": "規格",
+                                "itemValue": "??V ??A"
+                            },
+                            {
+                                "itemName": "上次保養日期",
+                                "itemValue": "2023/03/22"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
