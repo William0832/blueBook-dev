@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 
-import { Stack, FormGroup, FormControlLabel, Switch } from '@mui/material/'
+import Stack from '@mui/material/Stack'
 
 import DialogNodeAddBtns from './DialogNodeAddBtns'
 // const EdgeInputs = ({ nodes, sourceId, setSourceId, targetId, setTargetId }) => {
@@ -57,22 +57,6 @@ import DialogNodeAddBtns from './DialogNodeAddBtns'
 //       </FormControl>
 //     </>
 //   )
-// }
-
-// function SwitchLabels ({ label, value, setValue }) {
-//   return (
-//     <FormGroup>
-//       <FormControlLabel
-//         control={
-//           <Switch
-//             color="error"
-//             checked={value}
-//             onChange={() => setValue(ov => !ov)}
-//           />
-//         }
-//         label={label} />
-//     </FormGroup>
-//   );
 // }
 
 export default function NodeDialog ({ open, setOpen, category, createNode }) {

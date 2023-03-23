@@ -2,12 +2,31 @@ import TextField from '@mui/material/TextField'
 import { useEffect, useState, useMemo } from 'react'
 import clsx from 'clsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import { Box, Stack, Button, IconButton } from '@mui/material'
+import { Box, Stack, Button, IconButton, FormGroup, FormControlLabel, Switch } from '@mui/material'
 
+
+function SwitchLabels ({ label, value, setValue }) {
+  return (
+    <FormGroup>
+      <FormControlLabel
+        control={
+          <Switch
+            color="error"
+            checked={value}
+            onChange={() => setValue(ov => !ov)}
+          />
+        }
+        label={label} />
+    </FormGroup>
+  )
+}
 export default function ModifySideBar ({ target, modify, remove, setTarget }) {
   const [isOpen, setIsOpen] = useState(false)
   const [name, setName] = useState(target?.data?.label || '')
+  const [isAlert, setAlert] = useState(target?.data?.isAlert || false)
+
   const isStartNode = useMemo(() => target?.id === 'start', [target])
+
   useEffect(() => {
     if (!target) return
     setName(() => target.data?.label)
@@ -33,6 +52,7 @@ export default function ModifySideBar ({ target, modify, remove, setTarget }) {
             disabled={isStartNode || !target}
             onChange={(evt) => setName(evt.target.value)}
           />
+          <SwitchLabels label={'警示狀態'} value={isAlert} setValue={setAlert} />
           <Stack direction="row" spacing={2} justifyContent="end">
             <Button
               size="small"
@@ -46,7 +66,7 @@ export default function ModifySideBar ({ target, modify, remove, setTarget }) {
               size="small"
               variant="contained"
               disabled={isStartNode || !target}
-              onClick={() => modify(target, { name })}
+              onClick={() => modify(target, { name, isAlert })}
             >submit</Button>
             <Button
               size="small"

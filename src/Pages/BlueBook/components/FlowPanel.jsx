@@ -62,7 +62,7 @@ export default function FlowPanel ({
     const { id } = target
     const isNode = !!nodes.find(e => e.id === id)
     if (isNode) {
-      const { name: newName } = payload
+      const { name: newName, isAlert } = payload
       if (newName === '' || newName == null) return
       setNodes(
         (nds) => {
@@ -70,7 +70,8 @@ export default function FlowPanel ({
             ...e,
             data: {
               ...e.data,
-              label: e.id === id ? newName : e.data.label
+              label: e.id === id ? newName : e.data.label,
+              isAlert
             }
           }))
           return res

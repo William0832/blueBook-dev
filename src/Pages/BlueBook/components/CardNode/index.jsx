@@ -1,4 +1,4 @@
-// import { useCallback } from 'react'
+import { useMemo } from 'react'
 import { Handle, Position } from 'reactflow'
 import {
   Badge, Card, CardMedia, CardContent, Typography,
@@ -23,6 +23,10 @@ const defaultHandles = [
 ]
 
 function CardNode ({ data, isConnectable }) {
+  const imgSrc = useMemo(() => {
+    const src = data.isAlert ? data.objectImageAlarm : data.objectImage
+    return `./imgs/${src}`
+  }, [data])
   const MyCard = () => (
     <>
       <Card
@@ -31,8 +35,8 @@ function CardNode ({ data, isConnectable }) {
           sx={{ height: `${nodeImgHeight}px`, padding: '.5rem', paddingBottom: 0 }}>
           <img
             className="w-full h-full object-contain"
-            src={`./imgs/${data?.objectImage || ''}`}
-            alt={data?.objectImage || 'no-img'} />
+            src={imgSrc || ''}
+            alt={data?.objectName || 'no-img'} />
         </CardMedia>
         <CardContent sx={{ paddingTop: 1 }}>
           <Typography
