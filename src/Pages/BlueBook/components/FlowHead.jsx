@@ -33,7 +33,7 @@ export default function FlowHead ({ openCreateModal, isViewOnly, setIsViewOnly }
           variant={menuOpen ? 'contained' : 'outlined'}
           endIcon={<ArrowDropDown />}
           onClick={onOpenMenu}
-        >+
+        > + 新增設備
         </Button>
         <Menu
           anchorEl={anchorEl}
@@ -64,7 +64,7 @@ export default function FlowHead ({ openCreateModal, isViewOnly, setIsViewOnly }
           size="small"
           variant="contained"
           onClick={() => onMenuBtnClick()}>
-          + edges
+          + 新增上下游關係
         </Button>
         <Button
           sx={{ fontSize: 'px', paddingInline: 2, whiteSpace: "nowrap" }}
