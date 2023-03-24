@@ -1,11 +1,12 @@
 import {
-  createBrowserRouter,
+  // createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from "react-router-dom"
 import Root from '../Pages/Root'
 import Flow from '../Pages/BlueBook/BlueBook'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Root />,
