@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 export default function Sidebar () {
   return (
     <div id="sidebar" className="flex-col p-2 w-[200px] border-r-2">
@@ -5,7 +6,7 @@ export default function Sidebar () {
       <nav>
         <ul>
           <li>
-            <a href={`/blueBook`}>BlueBook</a>
+            <Link to={'blueBook'}>BlueBook</Link>
           </li>
         </ul>
       </nav>
