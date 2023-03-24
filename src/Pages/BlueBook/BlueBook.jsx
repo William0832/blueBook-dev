@@ -14,7 +14,7 @@ export default function BlueBook () {
 
   const [flowData, setFlowData] = useState(defaultFlowData)
   const [tabIndex, setTabIndex] = useState(0)
-  const [isViewOnly, setIsViewOnly] = useState(false)
+  const [isInteracted, setIsInteracted] = useState(false)
   const [gridOpen, setGridOpen] = useState(true)
   const tabs = useMemo(() => flowData.map(data => ({
     id: data.id,
@@ -49,9 +49,9 @@ export default function BlueBook () {
   return (
     <Stack className="w-full">
       <FlowHead
-        isViewOnly={isViewOnly}
+        isInteracted={isInteracted}
         openCreateModal={openCreateModal}
-        setIsViewOnly={setIsViewOnly}
+        setIsInteracted={setIsInteracted}
       />
 
       <FlowTabs
@@ -59,13 +59,13 @@ export default function BlueBook () {
         tabIndex={tabIndex}
         setTabIndex={setTabIndex}
         addNewTab={addNewTab}
-        isViewOnly={isViewOnly}
+        isInteracted={isInteracted}
       />
       <FlowPanel
         tabIndex={tabIndex}
         flowData={flowData}
         setFlowData={setFlowData}
-        isViewOnly={isViewOnly}
+        isInteracted={isInteracted}
         nodeType={nodeType}
         nodeDialogOpen={nodeDialogOpen}
         setNodeDialogOpen={setNodeDialogOpen}

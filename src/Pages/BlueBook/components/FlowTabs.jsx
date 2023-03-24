@@ -1,7 +1,7 @@
 import { Tabs, Tab, Box, Button } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 
-export default function FlowTabs ({ tabs, tabIndex, setTabIndex, addNewTab, isViewOnly }) {
+export default function FlowTabs ({ tabs, tabIndex, setTabIndex, addNewTab, isInteracted }) {
 
   const handleChange = (event, newValue) => {
     console.log(newValue)
@@ -22,7 +22,7 @@ export default function FlowTabs ({ tabs, tabIndex, setTabIndex, addNewTab, isVi
           ))}
         </Tabs>
         <Button
-          disabled={isViewOnly}
+          disabled={isInteracted}
           sx={{ maxWidth: '20px' }}
           onClick={addNewTab}>
           <AddIcon />

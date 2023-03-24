@@ -3,7 +3,7 @@ import { ArrowDropDown } from '@mui/icons-material'
 import { useState } from 'react'
 import { categories } from '../initState'
 // console.log({ categories })
-export default function FlowHead ({ openCreateModal, isViewOnly, setIsViewOnly }) {
+export default function FlowHead ({ openCreateModal, isInteracted, setIsInteracted }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl)
   const onOpenMenu = (event) => {
@@ -29,7 +29,7 @@ export default function FlowHead ({ openCreateModal, isViewOnly, setIsViewOnly }
         sx={{ height: 45 }}
       >
         <Button
-          disabled={isViewOnly}
+          disabled={isInteracted}
           variant={menuOpen ? 'contained' : 'outlined'}
           endIcon={<ArrowDropDown />}
           onClick={onOpenMenu}
@@ -60,7 +60,7 @@ export default function FlowHead ({ openCreateModal, isViewOnly, setIsViewOnly }
         </Menu>
 
         <Button
-          disabled={isViewOnly}
+          disabled={isInteracted}
           size="small"
           variant="contained"
           onClick={() => onMenuBtnClick()}>
@@ -69,9 +69,9 @@ export default function FlowHead ({ openCreateModal, isViewOnly, setIsViewOnly }
         <Button
           sx={{ fontSize: 'px', paddingInline: 2, whiteSpace: "nowrap" }}
           size="small"
-          variant={isViewOnly ? 'outlined' : 'contained'}
-          onClick={() => setIsViewOnly((value) => !value)}
-        > {isViewOnly ? '互動模式' : '編輯模式'}
+          variant={isInteracted ? 'outlined' : 'contained'}
+          onClick={() => setIsInteracted((value) => !value)}
+        > {isInteracted ? '互動模式' : '編輯模式'}
         </Button>
       </Stack>
     </div>

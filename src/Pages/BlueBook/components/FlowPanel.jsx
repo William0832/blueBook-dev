@@ -24,7 +24,7 @@ import { color } from '@mui/system';
 
 export default function FlowPanel ({
   tabIndex, flowData, setFlowData, nodeDialogOpen, setNodeDialogOpen, nodeType,
-  gridOpen, setGridOpen
+  gridOpen, setGridOpen, isInteracted
 }) {
 
   const defaultNodes = useMemo(
@@ -71,7 +71,7 @@ export default function FlowPanel ({
             data: {
               ...e.data,
               label: e.id === id ? newName : e.data.label,
-              isAlert
+              isAlert: e.id === id ? isAlert : e.data.isAlert
             }
           }))
           return res
@@ -134,6 +134,7 @@ export default function FlowPanel ({
         modify={modify}
         remove={remove}
         setTarget={setTarget}
+        isInteracted={isInteracted}
       />
     </Stack>
   )
