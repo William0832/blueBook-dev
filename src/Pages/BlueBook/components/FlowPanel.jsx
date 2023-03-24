@@ -38,7 +38,8 @@ export default function FlowPanel ({
 
   const [nodes, setNodes] = useState(
     defaultNodes.map(e => ({
-      ...e, style: getNodeStyle(e.data.type)
+      ...e,
+      // style: getNodeStyle(e.data.type)
     })))
   const [edges, setEdges] = useState(defaultEdges)
 

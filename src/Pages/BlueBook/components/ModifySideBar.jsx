@@ -2,8 +2,7 @@ import TextField from '@mui/material/TextField'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import { Box, Stack, Button, IconButton, FormGroup, FormControlLabel, Switch } from '@mui/material'
-
+import { Box, List, ListItem, ListItemText, Stack, Button, IconButton, FormGroup, FormControlLabel, Switch } from '@mui/material'
 
 function SwitchLabels ({ label, value, setValue, updateNode }) {
   return (
@@ -20,6 +19,21 @@ function SwitchLabels ({ label, value, setValue, updateNode }) {
     </FormGroup>
   )
 }
+
+function MetaDataList ({ data }) {
+  if (data == null) return null
+  return (
+    <List>
+      {data.map((e, i) => (
+        <ListItem key={i}>
+          <ListItemText primary={e?.itemName} secondary={e?.itemValue} />
+        </ListItem>))
+      }
+    </List>
+
+  )
+}
+
 export default function ModifySideBar ({ target, modify, remove, setTarget, isInteracted }) {
   const [isOpen, setIsOpen] = useState(false)
   const [name, setName] = useState(target?.data?.label || '')
@@ -70,7 +84,14 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
             onChange={onChangeName}
           />
           <SwitchLabels label={'警示狀態'} value={isAlert} setValue={setIsAlert} updateNode={updateNode} />
-          <Stack direction="row" spacing={2} justifyContent="end">
+          <MetaDataList data={target?.data?.metadata} />
+          <Button
+            size="small"
+            variant="contained"
+            disabled={!target}
+            color="error"
+          >下游全面警示</Button>
+          <Stack direction="row" spacing={2} justifyContent="space-between">
             <Button
               size="small"
               variant="contained"
