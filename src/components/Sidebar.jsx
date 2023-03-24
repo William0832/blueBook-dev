@@ -1,7 +1,15 @@
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { Typography, List, ListItem } from '@mui/material'
 export default function Sidebar () {
   const logoSize = 30
+
+  const handelLinkClass = ({ isActive }) => {
+    const linkClass = 'px-3 p-2 hover:bg-blue-100 duration-500 rounded-lg'
+    return [
+      linkClass,
+      isActive ? 'router-link-active' : null
+    ].join(' ')
+  }
 
   return (
     <div id="sidebar" className="flex-col p-2 w-[200px] border-r-2">
@@ -13,12 +21,12 @@ export default function Sidebar () {
         <Typography variant="h6">FCOP</Typography>
       </div>
 
-      <nav class>
+      <nav className="mt-4">
         <List>
           <ListItem>
-            <Link to={'blueBook'}>
+            <NavLink to={'blueBook'} className={handelLinkClass}>
               <Typography variant="h6">BlueBook</Typography>
-            </Link>
+            </NavLink>
           </ListItem>
         </List>
       </nav>
