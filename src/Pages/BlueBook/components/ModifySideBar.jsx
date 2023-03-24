@@ -23,7 +23,7 @@ function SwitchLabels ({ label, value, setValue, updateNode }) {
 function MetaDataList ({ data }) {
   if (data == null) return null
   return (
-    <List>
+    <List dense>
       {data.map((e, i) => (
         <ListItem key={i}>
           <ListItemText primary={e?.itemName} secondary={e?.itemValue} />
@@ -34,11 +34,14 @@ function MetaDataList ({ data }) {
   )
 }
 
-export default function ModifySideBar ({ target, modify, remove, setTarget, isInteracted }) {
+export default function ModifySideBar ({ target, modify, remove, setTarget, isInteracted, alertDownStreamNodes }) {
   const [isOpen, setIsOpen] = useState(false)
   const [name, setName] = useState(target?.data?.label || '')
   const [isAlert, setIsAlert] = useState(target?.data?.isAlert || false)
 
+  const onAlertDownStreamNodes = (isAlert) => {
+    alertDownStreamNodes(target, isAlert)
+  }
   const onChangeName = (evt) => {
     setName(() => evt.target.value)
   }
@@ -83,14 +86,25 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
             disabled={!target || isInteracted}
             onChange={onChangeName}
           />
-          <SwitchLabels label={'警示狀態'} value={isAlert} setValue={setIsAlert} updateNode={updateNode} />
+          <SwitchLabels
+            label={'警示狀態'} value={isAlert} setValue={setIsAlert} updateNode={updateNode} />
           <MetaDataList data={target?.data?.metadata} />
-          <Button
-            size="small"
-            variant="contained"
-            disabled={!target}
-            color="error"
-          >下游全面警示</Button>
+          <Stack direction="row" justifyContent="space-between">
+            <Button
+              size="small"
+              variant="outlined"
+              disabled={!target}
+              color="error"
+              onClick={() => onAlertDownStreamNodes(true)}
+            >啟動下游警示</Button>
+            <Button
+              size="small"
+              variant="outlined"
+              disabled={!target}
+              color="primary"
+              onClick={() => onAlertDownStreamNodes(false)}
+            >解除下游警示</Button>
+          </Stack>
           <Stack direction="row" spacing={2} justifyContent="space-between">
             <Button
               size="small"

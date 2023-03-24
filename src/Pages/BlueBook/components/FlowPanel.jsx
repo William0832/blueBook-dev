@@ -5,7 +5,7 @@ import GridOnIcon from '@mui/icons-material/GridOn';
 import ReactFlow, {
   addEdge, Panel, Background, Controls, MiniMap, ControlButton,
   ReactFlowProvider, useReactFlow,
-  ConnectionMode, applyNodeChanges
+  ConnectionMode, applyNodeChanges, applyEdgeChanges
 } from 'reactflow'
 
 import { Stack } from '@mui/material'
@@ -63,8 +63,9 @@ export default function FlowPanel ({
     const { id } = target
     const isNode = !!nodes.find(e => e.id === id)
     if (isNode) {
-      const { name: newName, isAlert } = payload
-      if (newName === '' || newName == null) return
+      const { name, isAlert } = payload
+      const newName = name || target?.data?.label
+      // if (newName === '' || newName == null) return
       setNodes(
         (nds) => {
           const res = nds.map(e => ({
@@ -88,6 +89,30 @@ export default function FlowPanel ({
       setNodes((nds) => nds.filter(e => e.id !== id))
     }
     setTarget(() => null)
+  }
+  const alertDownStreamNodes = (target, isAlert = true) => {
+    const getDownStreamNodes = (edges, targetId, visitedEdgeIds = []) => {
+      const downStreamNodes = []
+      edges = edges.filter(edge => !visitedEdgeIds.includes(edge.id))
+      edges.forEach(edge => {
+        if (edge.source === targetId) {
+          downStreamNodes.push(edge.target)
+          visitedEdgeIds.push(edge.id)
+          downStreamNodes.push(
+            ...getDownStreamNodes(edges, edge.target, visitedEdgeIds)
+          )
+        }
+      })
+      return downStreamNodes
+    }
+    const downStreamNodeIds = [
+      target.id, ...getDownStreamNodes(edges, target.id)
+    ]
+
+    downStreamNodeIds.forEach(id => {
+      const target = nodes.find(node => node.id === id)
+      modify(target, { isAlert })
+    })
   }
   // change tabIndex
   useEffect(() => {
@@ -136,6 +161,7 @@ export default function FlowPanel ({
         remove={remove}
         setTarget={setTarget}
         isInteracted={isInteracted}
+        alertDownStreamNodes={alertDownStreamNodes}
       />
     </Stack>
   )
@@ -193,7 +219,7 @@ function Flow ({
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       onNodeClick={onNodeClick}
-      onEdgeClick={onEdgeClick}
+      // onEdgeClick={onEdgeClick}
       nodeTypes={nodeTypes}
       connectionMode={ConnectionMode.Loose}
       className="transition"
