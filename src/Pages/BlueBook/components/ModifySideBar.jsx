@@ -1,47 +1,20 @@
 import TextField from '@mui/material/TextField'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
+import { isEdge } from 'reactflow'
 import clsx from 'clsx'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import { Box, List, ListItem, ListItemText, Stack, Button, IconButton, FormGroup, FormControlLabel, Switch } from '@mui/material'
 
-function SwitchLabels ({ label, value, setValue, updateNode }) {
-  return (
-    <FormGroup>
-      <FormControlLabel
-        control={
-          <Switch
-            color="error"
-            checked={value}
-            onClick={() => setValue(ov => !ov)}
-          />
-        }
-        label={label} />
-    </FormGroup>
-  )
-}
-
-function MetaDataList ({ data }) {
-  if (data == null) return null
-  return (
-    <List dense>
-      {data.map((e, i) => (
-        <ListItem key={i}>
-          <ListItemText primary={e?.itemName} secondary={e?.itemValue} />
-        </ListItem>))
-      }
-    </List>
-
-  )
-}
-
 export default function ModifySideBar ({ target, modify, remove, setTarget, isInteracted, alertDownStreamNodes }) {
+  const isEdgeTarget = useMemo(() => target ? isEdge(target) : null, [target])
   const [isOpen, setIsOpen] = useState(false)
-  const [name, setName] = useState(target?.data?.label || '')
-  const [isAlert, setIsAlert] = useState(target?.data?.isAlert || false)
+  const [name, setName] = useState('')
+  const [isAlert, setIsAlert] = useState(false)
 
   const onAlertDownStreamNodes = (isAlert) => {
     alertDownStreamNodes(target, isAlert)
   }
+
   const onChangeName = (evt) => {
     setName(() => evt.target.value)
   }
@@ -63,7 +36,7 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
       return
     }
     setIsAlert(() => target.data?.isAlert)
-    setName(() => target.data?.label)
+    setName(() => target?.data?.label || target?.label)
     setIsOpen(() => true)
   }, [target])
   return (
@@ -78,7 +51,7 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
           sx={{ opacity: !!(target && isOpen) ? 1 : 0 }}
           spacing={2}
           className=" mx-[20px] pt-2 h-full overflow-hidden">
-          <h4>{target?.data?.type}</h4>
+          <h4>{isEdgeTarget ? '上下游關係' : '設備'}</h4>
           <TextField
             label="name"
             id="name"
@@ -89,22 +62,24 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
           <SwitchLabels
             label={'警示狀態'} value={isAlert} setValue={setIsAlert} updateNode={updateNode} />
           <MetaDataList data={target?.data?.metadata} />
-          <Stack direction="row" justifyContent="space-between">
-            <Button
-              size="small"
-              variant="outlined"
-              disabled={!target}
-              color="error"
-              onClick={() => onAlertDownStreamNodes(true)}
-            >啟動下游警示</Button>
-            <Button
-              size="small"
-              variant="outlined"
-              disabled={!target}
-              color="primary"
-              onClick={() => onAlertDownStreamNodes(false)}
-            >解除下游警示</Button>
-          </Stack>
+          {isEdgeTarget ? null :
+            <Stack direction="row" justifyContent="space-between">
+              <Button
+                size="small"
+                variant="outlined"
+                disabled={!target}
+                color="error"
+                onClick={() => onAlertDownStreamNodes(true)}
+              >啟動下游警示</Button>
+              <Button
+                size="small"
+                variant="outlined"
+                disabled={!target}
+                color="primary"
+                onClick={() => onAlertDownStreamNodes(false)}
+              >解除下游警示</Button>
+            </Stack>
+          }
           <Stack direction="row" spacing={2} justifyContent="space-between">
             <Button
               size="small"
@@ -171,5 +146,34 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
         </IconButton>
       </div>
     </>
+  )
+}
+
+function SwitchLabels ({ label, value, setValue, updateNode }) {
+  return (
+    <FormGroup>
+      <FormControlLabel
+        control={
+          <Switch
+            color="error"
+            checked={value}
+            onClick={() => setValue(ov => !ov)}
+          />
+        }
+        label={label} />
+    </FormGroup>
+  )
+}
+
+function MetaDataList ({ data }) {
+  if (data == null) return null
+  return (
+    <List dense>
+      {data.map((e, i) => (
+        <ListItem key={i}>
+          <ListItemText primary={e?.itemName} secondary={e?.itemValue} />
+        </ListItem>))
+      }
+    </List>
   )
 }

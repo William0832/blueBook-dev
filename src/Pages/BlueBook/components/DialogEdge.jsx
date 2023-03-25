@@ -1,5 +1,5 @@
-import { useState } from 'react'
-
+import { useCallback, useState, useEffect } from 'react'
+import { useReactFlow } from 'reactflow'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -7,8 +7,110 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
 import { Stack, InputLabel, MenuItem, FormControl, Select } from '@mui/material/'
+// import { edgeOptions } from '../initState'
 
-const EdgeInputs = ({ nodes, refSource, refTarget, sourceId, setSourceId, targetId, setTargetId }) => {
+export default function EdgeDialog ({ open, setOpen, edgeTypes, nodes, createEdge, preConnect }) {
+  const [name, setName] = useState('')
+  const [edgeType, setEdgeType] = useState('')
+  const [sourceId, setSourceId] = useState('')
+  const [targetId, setTargetId] = useState('')
+  const [strokeSize, setStrokeSize] = useState(1)
+
+  useEffect(() => {
+    // close init state
+    if (!open) {
+      setName(() => '')
+      setEdgeType(() => '')
+      setSourceId(() => '')
+      setTargetId(() => '')
+      return
+    }
+    if (open && nodes.length < 2) {
+      alert('請先新增2個設備')
+      setOpen(() => false)
+    }
+  }, [open])
+
+  const handleClose = () => setOpen(() => false)
+  const onSubmit = () => {
+    if (edgeType === '' || edgeType == null) {
+      alert('Plz select edge type!')
+      return
+    }
+    // create
+    if (preConnect) {
+      console.log(preConnect)
+      const { sourceHandle, targetHandle } = preConnect
+      const payload = {
+        sourceHandle,
+        targetHandle,
+        label: name,
+        source: sourceId,
+        target: targetId,
+        edgeType
+      }
+      createEdge(payload)
+      setOpen(() => false)
+      return
+    }
+    // update
+    const sourceHandle = ''
+    const targetHandle = ''
+    const payload = {
+      label: name,
+      sourceHandle,
+      targetHandle,
+      source: sourceId,
+      target: targetId,
+      edgeType
+    }
+    createEdge(payload)
+    setOpen(() => false)
+  }
+
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+    >
+      <DialogTitle id="alert-dialog-title">+ Edge
+      </DialogTitle>
+      <DialogContent>
+        <Stack spacing={3}>
+          <TextField
+            id="name"
+            label="name"
+            variant="standard"
+            placeholder="Enter Edge name"
+            value={name}
+            onChange={(evt) => setName(evt.target.value)} />
+          <EdgeTypeSelector
+            setName={setName}
+            options={edgeTypes}
+            value={edgeType}
+            onChange={(evt) => setEdgeType(evt.target.value)} />
+          <EdgeLinkInputs
+            preConnect={preConnect}
+            nodes={nodes}
+            sourceId={sourceId}
+            targetId={targetId}
+            setSourceId={setSourceId}
+            setTargetId={setTargetId}
+          />
+        </Stack>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={handleClose} color="error">Cancel</Button>
+        <Button onClick={onSubmit} autoFocus>
+          Submit
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+function EdgeLinkInputs ({ preConnect, nodes, sourceId, setSourceId, targetId, setTargetId }) {
   const onChange = (evt, type) => {
     const { value: id } = evt.target
     if (id === '' || id == null) return
@@ -16,6 +118,12 @@ const EdgeInputs = ({ nodes, refSource, refTarget, sourceId, setSourceId, target
       ? setSourceId(() => id)
       : setTargetId(() => id)
   }
+  useEffect(() => {
+    if (preConnect?.source && preConnect?.target) {
+      setTargetId(() => preConnect?.target)
+      setSourceId(() => preConnect?.source)
+    }
+  }, [preConnect])
   return (
     <>
       <FormControl fullWidth>
@@ -23,7 +131,7 @@ const EdgeInputs = ({ nodes, refSource, refTarget, sourceId, setSourceId, target
         <Select
           label="Source"
           id="source"
-          value={sourceId}
+          value={preConnect?.source || sourceId || ''}
           onChange={(evt) => onChange(evt, 'source')}>
           {nodes
             .filter(e => e.id !== targetId)
@@ -38,7 +146,7 @@ const EdgeInputs = ({ nodes, refSource, refTarget, sourceId, setSourceId, target
       <FormControl fullWidth>
         <InputLabel>Target</InputLabel>
         <Select
-          value={targetId}
+          value={preConnect?.target || targetId || ''}
           label="Target"
           id="target"
           onChange={(evt) => onChange(evt, 'target')}>
@@ -55,75 +163,31 @@ const EdgeInputs = ({ nodes, refSource, refTarget, sourceId, setSourceId, target
     </>
   )
 }
-export default function NodeDialog ({
-  open, setOpen, type, isEdge = false, nodes, createNode, createEdge }) {
-  const [name, setName] = useState('')
-  const [sourceId, setSourceId] = useState('')
-  const [targetId, setTargetId] = useState('')
 
-  const handleClose = () => setOpen(false)
-  const onSubmit = () => {
-    if (isEdge) {
-      if (sourceId === '' || sourceId == null) {
-        alert('Plz input Source!')
-        return
-      }
-      if (targetId === '' || targetId == null) {
-        alert('Plz input Target!')
-        return
-      }
-      createEdge(sourceId, targetId, name)
-      setOpen(false)
-      setName(() => '')
-      return
-    }
-    if (name === '' || name == null) {
-      alert('Plz input Name!')
-      return
-    }
-    createNode(type, name)
-    setName(() => '')
-    setOpen(false)
+function EdgeTypeSelector ({ setName, options, value, onChange }) {
+  const [color, setColor] = useState('')
+  const changeValueAndColor = (evt) => {
+    const target = options.find(opt => opt.id === evt.target.value)
+    setColor(() => target.color)
+    setName(() => target.label)
+    onChange(evt)
   }
   return (
-    <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
+    <FormControl fullWidth>
+      <InputLabel id="edge-type-select-label">Type</InputLabel>
+      <Select
+        sx={{ color }}
+        labelId="edge-type-select-label"
+        id="edge-type-select"
+        value={value}
+        label="Type"
+        onChange={changeValueAndColor}
       >
-        <DialogTitle id="alert-dialog-title">
-          {isEdge
-            ? 'Add edge'
-            : `Add ${type?.toUpperCase()} node`
-          }
-        </DialogTitle>
-        <DialogContent>
-          <Stack spacing={3}>
-            <TextField
-              id="name"
-              label="name"
-              variant="standard"
-              placeholder={isEdge ? 'Enter edge name' : 'Enter node name'}
-              onChange={(evt) => { setName(evt.target.value) }} />
-            {isEdge
-              ? <EdgeInputs
-                nodes={nodes}
-                sourceId={sourceId}
-                targetId={targetId}
-                setSourceId={setSourceId}
-                setTargetId={setTargetId}
-              />
-              : null}
-          </Stack>
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={handleClose} color="error">Cancel</Button>
-          <Button onClick={onSubmit} autoFocus>
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+        {options.map(opt => (
+          <MenuItem key={opt.id} value={opt.id} sx={{ color: opt.color }}>
+            {opt.label}
+          </MenuItem>))}
+      </Select>
+    </FormControl>
+  )
 }

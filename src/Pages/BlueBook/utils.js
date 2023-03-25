@@ -1,5 +1,3 @@
-import { color } from "@mui/system"
-
 export const getNodeStyle = (todoType) => {
   const defaultNodeOptions = {
     borderRadius: '10px',
@@ -39,13 +37,20 @@ export const getEdgeStyle = (edgeType) => {
   // '電力 淺黃色(gold)
   switch (edgeType) {
     case 'electric':
-      return { color: 'gold' }
+      return { stroke: 'gold' }
+    case 'water':
+      return { stroke: 'lightskyblue' }
+    case 'chemical1':
+      return { stroke: 'cyan' }
+    case 'chemical2':
+      return { stroke: 'darkcyan' }
+    case 'gas':
+      return { stroke: 'lightseagreen' }
+    case 'wast':
+      return { stroke: 'darkgoldenrod' }
+    case 'wastWater':
+      return { stroke: 'lightslategray' }
+    case 'lowLight':
+      return { stroke: 'red' }
   }
-  // 水 淺藍色(lightskyblue)
-  //   化學原物料1 - 青色 cyan
-  //   化學原物料2 – 綠色 darkcyan
-  //   氣體原物料 - lightseagreen
-  // 廢棄物排放 咖啡色 darkgoldenrod
-  // 廢水資排放 灰色 lightslategray
-  // Low light樣式都預設為 red'
 }

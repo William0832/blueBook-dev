@@ -3,28 +3,30 @@ import { useState, useCallback, useEffect, useMemo } from 'react'
 import GridOnIcon from '@mui/icons-material/GridOn';
 
 import ReactFlow, {
+  isNode,
   addEdge, Panel, Background, Controls, MiniMap, ControlButton,
   ReactFlowProvider, useReactFlow,
   ConnectionMode, applyNodeChanges, applyEdgeChanges
 } from 'reactflow'
 
 import { Stack } from '@mui/material'
-
 import ModifySideBar from './ModifySideBar'
-import NodeDialog from './DialogNode'
+import DialogNode from './DialogNode'
+import DialogEdge from './DialogEdge'
+
 
 import {
+  edgeTypes,
   nodeTypes, edgeOptions, connectionLineStyle
 } from '../initState.js'
-import { getNodeStyle } from '../utils'
+import { getEdgeStyle } from '../utils'
 
 import 'reactflow/dist/style.css'
 import '../style.css'
-import { color } from '@mui/system';
 
 export default function FlowPanel ({
   tabIndex, flowData, setFlowData, nodeDialogOpen, setNodeDialogOpen, nodeType,
-  gridOpen, setGridOpen, isInteracted
+  gridOpen, setGridOpen, isInteracted, edgeDialogOpen, setEdgeDialogOpen
 }) {
 
   const defaultNodes = useMemo(
@@ -39,9 +41,10 @@ export default function FlowPanel ({
   const [nodes, setNodes] = useState(
     defaultNodes.map(e => ({
       ...e,
-      // style: getNodeStyle(e.data.type)
     })))
   const [edges, setEdges] = useState(defaultEdges)
+  const [preConnect, setPreConnect] = useState(null)
+  const [target, setTarget] = useState()
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => applyNodeChanges(changes, nds))
@@ -49,23 +52,28 @@ export default function FlowPanel ({
   const onEdgesChange = useCallback(
     (changes) => setEdges((eds) => applyEdgeChanges(changes, eds))
   )
+
   const onConnect = useCallback(
     (connection) => {
-      const res = prompt('連接名稱(可略過)', '')
+      if (isInteracted) return
+      if (connection.source === connection.target) {
+        alert('請選其他設備的連接點')
+        return
+      }
       console.log(connection)
-      if (res == null) return
-      return setEdges((eds) => addEdge({ ...connection, label: res }, eds))
+
+      setEdgeDialogOpen(() => true)
+      setPreConnect(() => connection)
     },
-    [setEdges]
+    [edges]
   )
-  const [target, setTarget] = useState()
-  const modify = (target, payload) => {
-    const { id } = target
-    const isNode = !!nodes.find(e => e.id === id)
-    if (isNode) {
+
+  const modify = (element, payload) => {
+    const { id } = element
+    const isNodeTarget = isNode(element)
+    if (isNodeTarget) {
       const { name, isAlert } = payload
-      const newName = name || target?.data?.label
-      // if (newName === '' || newName == null) return
+      const newName = name || element?.data?.label
       setNodes(
         (nds) => {
           const res = nds.map(e => ({
@@ -80,14 +88,44 @@ export default function FlowPanel ({
         }
       )
       setTarget(() => null)
+      return
     }
+    let { name, isAlert, edgeType, target, targetHandle, source, sourceId } = payload
+    setEdges((edges) => edges.map(edg => {
+      if (edg.id === element.id) {
+        edgeType = edgeType || edg.data.edgeType
+        const style = getEdgeStyle(edgeType)
+        return {
+          ...edg,
+          label: name || '',
+          data: { isAlert, edgeType },
+          target: target || edg.target,
+          targetHandle: targetHandle || edg.targetHandle,
+          source: source || edg.source,
+          sourceId: sourceId || edg.sourceId,
+          style: {
+            ...edg.style,
+            stroke: isAlert ? 'red' : style['stroke']
+          },
+          markerEnd: {
+            ...edg.markerEnd,
+            color: isAlert ? 'red' : style['stroke']
+          }
+        }
+      }
+      return edg
+    }))
+
+    console.log(element, payload)
+    setTarget(() => null)
+
   }
-  const remove = (target) => {
+  const remove = (element) => {
     const { id } = target
-    const isNode = !!nodes.find(e => e.id === id)
-    if (isNode) {
-      setNodes((nds) => nds.filter(e => e.id !== id))
-    }
+    const isNodeElement = isNode(element)
+    isNodeElement
+      ? setNodes((nds) => nds.filter(e => e.id !== id))
+      : setEdges((edges) => edges.filter(e => e.id !== id))
     setTarget(() => null)
   }
   const alertDownStreamNodes = (target, isAlert = true) => {
@@ -145,14 +183,16 @@ export default function FlowPanel ({
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          clickTarget={
-            (node) => setTarget(() => node)
-          }
+          clickTarget={(node) => setTarget(() => node)}
           nodeType={nodeType}
           nodeDialogOpen={nodeDialogOpen}
           setNodeDialogOpen={setNodeDialogOpen}
+          edgeDialogOpen={edgeDialogOpen}
+          setEdgeDialogOpen={setEdgeDialogOpen}
           gridOpen={gridOpen}
           setGridOpen={setGridOpen}
+          preConnect={preConnect}
+          setPreConnect={setPreConnect}
         />
       </ReactFlowProvider>
       <ModifySideBar
@@ -168,11 +208,16 @@ export default function FlowPanel ({
 }
 
 function Flow ({
-  nodes, edges, setNodes, setEdges, onNodesChange, onEdgesChange, onConnect, clickTarget, nodeType, nodeDialogOpen, setNodeDialogOpen, gridOpen, setGridOpen
+  nodes, edges, setNodes, setEdges, onNodesChange, onEdgesChange, onConnect, clickTarget, nodeType, nodeDialogOpen, setNodeDialogOpen, gridOpen, setGridOpen,
+  edgeDialogOpen, setEdgeDialogOpen,
+  preConnect,
+  setPreConnect
 }) {
-  // const [isEdge, setIsEdge] = useState(false)
-  // const reactFlow = useReactFlow();
-
+  const rf = useReactFlow()
+  const getHandles = (node) => {
+    const symbolProp = Object.getOwnPropertySymbols(node)[0]
+    return node[symbolProp].handleBounds?.source
+  }
   const createNode = useCallback(({ category, name, target, isAlert }) => {
     const { categoryId, categoryName, categoryNameEN } = category
     const maxX = Math.max(...nodes.map(e => e.position.x), 0)
@@ -196,12 +241,39 @@ function Flow ({
     }
     setNodes((nds) => nds.concat(newNode))
   }, [nodes])
-  const createEdge = useCallback((sourceId, targetId, name) => {
+
+  const getRandomItem = (list) => list[Math.floor(Math.random() * list.length)]
+  const getNodeHandles = ({ source, target, sourceHandle, targetHandle }) => {
+    if (sourceHandle && targetHandle) return { sourceHandle, targetHandle }
+    const targetHandles = getHandles(rf.getNode(target))
+    const sourceHandles = getHandles(rf.getNode(source))
+    return {
+      sourceHandle: getRandomItem(targetHandles)?.id,
+      targetHandle: getRandomItem(sourceHandles)?.id
+    }
+  }
+
+  const createEdge = useCallback((payload) => {
+    const { label, source, target, sourceHandle, targetHandle, edgeType } = payload
     const newEdge = {
-      id: uid(), source: sourceId, target: targetId, label: name || ''
+      ...edgeOptions,
+      id: uid(),
+      style: {
+        ...edgeOptions.style,
+        ...getEdgeStyle(payload.edgeType)
+      },
+      markerEnd: {
+        ...edgeOptions.markerEnd,
+        color: getEdgeStyle(payload.edgeType)['stroke']
+      },
+      data: { edgeType, isAlert: false },
+      label,
+      source, target,
+      ...getNodeHandles({ source, target, sourceHandle, targetHandle })
     }
     setEdges((egs) => egs.concat(newEdge))
-  }, [])
+    setPreConnect(() => null)
+  }, [edges])
 
   const onNodeClick = (evt, node) => {
     console.log(node)
@@ -209,20 +281,21 @@ function Flow ({
   }
   const onEdgeClick = (evt, edge) => {
     console.log(edge)
+    clickTarget(edge)
   }
   return (
     <ReactFlow
       nodes={nodes}
       edges={edges}
-      defaultEdgeOptions={edgeOptions}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       onNodeClick={onNodeClick}
-      // onEdgeClick={onEdgeClick}
-      nodeTypes={nodeTypes}
+      onEdgeClick={onEdgeClick}
       connectionMode={ConnectionMode.Loose}
       className="transition"
+      nodeTypes={nodeTypes}
+      defaultEdgeOptions={edgeOptions}
       connectionLineStyle={connectionLineStyle}
     >
       <Controls style={{ fill: "#fff", color: '#fff' }}>
@@ -234,11 +307,19 @@ function Flow ({
       </Controls>
       {/* <MiniMap zoomable pannable /> */}
       {gridOpen ? <Background className="bg-gray-800" /> : null}
-      <NodeDialog
+      <DialogNode
         open={nodeDialogOpen}
         setOpen={setNodeDialogOpen}
         category={nodeType}
         createNode={createNode}
+      />
+      <DialogEdge
+        open={edgeDialogOpen}
+        setOpen={setEdgeDialogOpen}
+        edgeTypes={edgeTypes}
+        nodes={nodes}
+        preConnect={preConnect}
+        createEdge={createEdge}
       />
     </ReactFlow>
   )

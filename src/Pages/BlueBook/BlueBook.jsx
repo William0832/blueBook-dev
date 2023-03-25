@@ -9,6 +9,7 @@ import FlowHead from './components/FlowHead'
 
 export default function BlueBook () {
   const [nodeDialogOpen, setNodeDialogOpen] = useState(false)
+
   const [nodeType, setNodeType] = useState(null)
   const [edgeDialogOpen, setEdgeDialogOpen] = useState(false)
 
@@ -69,6 +70,8 @@ export default function BlueBook () {
         nodeType={nodeType}
         nodeDialogOpen={nodeDialogOpen}
         setNodeDialogOpen={setNodeDialogOpen}
+        edgeDialogOpen={edgeDialogOpen}
+        setEdgeDialogOpen={setEdgeDialogOpen}
         gridOpen={gridOpen}
         setGridOpen={setGridOpen}
       />

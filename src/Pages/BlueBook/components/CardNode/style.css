@@ -45,6 +45,22 @@
   height: var(--handel-size);
 }
 
-.react-flow__node-card:hover .react-flow__handle {
+.react-flow__node-card:hover .react-flow__handle,
+.react-flow__node-card.selected .react-flow__handle {
   opacity: 1;
 }
+
+
+/*  edge */
+.react-flow__edge .react-flow__edge-path {
+  stroke: #aaa;
+  stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 4 !important;
+}
+
+/* .react-flow__arrowhead > polyline {
+  stroke: #ccc;
+} */

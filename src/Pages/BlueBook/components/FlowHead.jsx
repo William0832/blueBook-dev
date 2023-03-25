@@ -48,15 +48,6 @@ export default function FlowHead ({ openCreateModal, isInteracted, setIsInteract
               <div> + {c.categoryName}</div>
             </MenuItem>
           ))}
-          {/* <MenuItem onClick={() => onMenuBtnClick('equipment')}>
-            <Typography> + Equipment</Typography>
-          </MenuItem>
-          <MenuItem onClick={() => onMenuBtnClick('facility')}>
-            <Typography> + Facility</Typography>
-          </MenuItem>
-          <MenuItem onClick={() => onMenuBtnClick('workstation')}>
-            <Typography> + Workstation</Typography>
-          </MenuItem> */}
         </Menu>
 
         <Button
