@@ -1,15 +1,22 @@
 import TextField from '@mui/material/TextField'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { isEdge } from 'reactflow'
 import clsx from 'clsx'
+
+import EdgeTypeSelector from './EdgeTypeSelector'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import { Box, List, ListItem, ListItemText, Stack, Button, IconButton, FormGroup, FormControlLabel, Switch } from '@mui/material'
 
-export default function ModifySideBar ({ target, modify, remove, setTarget, isInteracted, alertDownStreamNodes }) {
+export default function ModifySideBar ({ target, modify, remove, setTarget, isInteracted, alertDownStreamNodes, edgeTypes }) {
   const isEdgeTarget = useMemo(() => target ? isEdge(target) : null, [target])
   const [isOpen, setIsOpen] = useState(false)
   const [name, setName] = useState('')
   const [isAlert, setIsAlert] = useState(false)
+  const [edgeType, setEdgeType] = useState('')
+
+  const onChangeEdgeType = useCallback((evt) => {
+    setEdgeType(() => evt.target.value)
+  }, [isEdgeTarget])
 
   const onAlertDownStreamNodes = (isAlert) => {
     alertDownStreamNodes(target, isAlert)
@@ -20,12 +27,14 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
   }
 
   const updateNode = () => {
-    modify(target, { name, isAlert })
+    const payload = { name, isAlert }
+    if (isEdgeTarget) payload.edgeType = edgeType
+    modify(target, payload)
   }
 
   const removeNode = () => {
     remove(target)
-    setTarget(() => null)
+    setTarget(null)
   }
 
   useEffect(() => {
@@ -35,6 +44,7 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
       setIsOpen(() => false)
       return
     }
+    setEdgeType(() => isEdgeTarget ? target?.data?.edgeType : '')
     setIsAlert(() => target.data?.isAlert)
     setName(() => target?.data?.label || target?.label)
     setIsOpen(() => true)
@@ -59,6 +69,14 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
             disabled={!target || isInteracted}
             onChange={onChangeName}
           />
+          {
+            isEdgeTarget && <EdgeTypeSelector
+              setName={setName}
+              options={edgeTypes}
+              value={edgeType}
+              onChange={onChangeEdgeType} />
+          }
+
           <SwitchLabels
             label={'警示狀態'} value={isAlert} setValue={setIsAlert} updateNode={updateNode} />
           <MetaDataList data={target?.data?.metadata} />
@@ -86,7 +104,7 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
               variant="contained"
               disabled={!target}
               color="inherit"
-              onClick={() => setTarget(() => null)}
+              onClick={() => setTarget(null)}
             >Cancel</Button>
 
             <Button

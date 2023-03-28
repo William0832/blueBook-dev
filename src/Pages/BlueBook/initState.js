@@ -1,13 +1,5 @@
 import { MarkerType } from 'reactflow'
 import CardNode from './components/CardNode/index'
-import objectList from '../../assets/objectList.json'
-
-const { categories } = objectList.data
-// console.table(categories)
-// console.table(categories[0].objectList)
-// console.table(categories[1].objectList)
-// console.table(categories[2].objectList)
-export { categories }
 
 export const nodeTypes = { 'card': CardNode }
 
@@ -21,12 +13,6 @@ export const edgeTypes = [
   { id: 'wastWater', label: '廢水資排放', color: 'lightslategray' },
   // { id: 'lowLight', label: '警示', color: 'red' }
 ]
-export const defaultFlowData = [{
-  id: 1,
-  tabLabel: 'tab1',
-  nodes: [],
-  edges: []
-}]
 
 export const edgeOptions = {
   type: 'step',

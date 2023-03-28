@@ -54,3 +54,15 @@ export const getEdgeStyle = (edgeType) => {
       return { stroke: 'red' }
   }
 }
+
+export const parseFlowContent = (data) => {
+  const parsedData = JSON.parse(data)
+  const result = { edges: [], nodes: [] }
+  if (parsedData == null) return result
+  const { edges, nodes } = parsedData
+  result.edges = edges ? edges : []
+  result.nodes = nodes ? nodes : []
+  return result
+}
+
+export const getRandomItem = (list) => list[Math.floor(Math.random() * list.length)]

@@ -1,80 +1,92 @@
 // import { v4 as uid } from 'uuid'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
+
 import { Stack } from '@mui/material'
 import FlowTabs from './components/FlowTabs'
 import FlowPanel from './components/FlowPanel'
-import { defaultFlowData } from './initState'
 import FlowHead from './components/FlowHead'
 
-export default function BlueBook () {
-  const [nodeDialogOpen, setNodeDialogOpen] = useState(false)
+import useFlowStore from '../../store/useFlowStore'
+import { shallow } from 'zustand/shallow'
+import LoadingPage from '../../components/LoadingPage'
+import { parseFlowContent } from '../../utils';
 
+export default function BlueBook () {
+  const { pId, bpId } = useParams()
+
+  const { loading, err, categories, fetchBlueprint, createBlueprint, save, tabIndex, setTabIndex } = useFlowStore(
+    (state) => ({
+      ...state
+    }),
+    shallow
+  )
+  // const blueprint = useFlowStore(state => state.blueprint)
+  const [nodeDialogOpen, setNodeDialogOpen] = useState(false)
   const [nodeType, setNodeType] = useState(null)
   const [edgeDialogOpen, setEdgeDialogOpen] = useState(false)
-
-  const [flowData, setFlowData] = useState(defaultFlowData)
-  const [tabIndex, setTabIndex] = useState(0)
   const [isInteracted, setIsInteracted] = useState(false)
   const [gridOpen, setGridOpen] = useState(true)
-  const tabs = useMemo(() => flowData.map(data => ({
-    id: data.id,
-    label: data.tabLabel
-  })))
+
 
   function openCreateModal (category) {
     if (category) {
-      console.log(category)
       setNodeType((ov) => category)
       setNodeDialogOpen(() => true)
       return
     }
     setEdgeDialogOpen(() => true)
   }
-  function addFlowData (id) {
-    setFlowData((data) => {
-      const newId = id || data.length + 1
-      const newData = {
-        id: newId,
-        tabLabel: `tab${newId}`,
-        nodes: [],
-        edges: []
-      }
-      return data.concat(newData)
-    })
-  }
-  function addNewTab () {
-    addFlowData()
-    setTabIndex(() => tabs.length)
-  }
-  return (
-    <Stack className="w-full">
-      <FlowHead
-        isInteracted={isInteracted}
-        openCreateModal={openCreateModal}
-        setIsInteracted={setIsInteracted}
-      />
 
-      <FlowTabs
-        tabs={tabs}
-        tabIndex={tabIndex}
-        setTabIndex={setTabIndex}
-        addNewTab={addNewTab}
-        isInteracted={isInteracted}
-      />
-      <FlowPanel
-        tabIndex={tabIndex}
-        flowData={flowData}
-        setFlowData={setFlowData}
-        isInteracted={isInteracted}
-        nodeType={nodeType}
-        nodeDialogOpen={nodeDialogOpen}
-        setNodeDialogOpen={setNodeDialogOpen}
-        edgeDialogOpen={edgeDialogOpen}
-        setEdgeDialogOpen={setEdgeDialogOpen}
-        gridOpen={gridOpen}
-        setGridOpen={setGridOpen}
-      />
-    </Stack>
+  async function addNewTab () {
+    await createBlueprint()
+  }
+  async function onSave () {
+    await save({})
+  }
+  // init fetch bp
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        if (!pId || !bpId) return
+        setTabIndex(0)
+        await fetchBlueprint({ pId, bpId })
+      } catch (err) {
+        console.warn(err)
+      }
+    }
+    fetchData()
+  }, [bpId])
+
+  return (
+    <>
+      <LoadingPage loading={loading} />
+      <Stack className="w-full">
+        <FlowHead
+          categories={categories}
+          isInteracted={isInteracted}
+          openCreateModal={openCreateModal}
+          setIsInteracted={setIsInteracted}
+          onSave={onSave}
+        />
+        <FlowTabs
+          addNewTab={addNewTab}
+          isInteracted={isInteracted}
+        />
+        <FlowPanel
+          tabIndex={tabIndex}
+          isInteracted={isInteracted}
+          nodeType={nodeType}
+          nodeDialogOpen={nodeDialogOpen}
+          setNodeDialogOpen={setNodeDialogOpen}
+          edgeDialogOpen={edgeDialogOpen}
+          setEdgeDialogOpen={setEdgeDialogOpen}
+          gridOpen={gridOpen}
+          setGridOpen={setGridOpen}
+        />
+      </Stack>
+    </>
   )
 }

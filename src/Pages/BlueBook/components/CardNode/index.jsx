@@ -12,14 +12,13 @@ const nodeImgHeight = nodeHeight * 0.6
 const leftNodeLength = 25
 const rightNodeLength = nodeWidth - leftNodeLength
 const defaultHandles = [
-  { id: uuid(), position: Position.Top, style: { left: leftNodeLength } },
-  { id: uuid(), position: Position.Top },
-  { id: uuid(), position: Position.Top, style: { left: rightNodeLength } },
-  { id: uuid(), position: Position.Left },
-  { id: uuid(), position: Position.Right },
-  { id: uuid(), position: Position.Bottom, style: { left: leftNodeLength } },
-  { id: uuid(), position: Position.Bottom },
-  { id: uuid(), position: Position.Bottom, style: { left: rightNodeLength } }
+  { id: '1', position: Position.Top, style: { left: leftNodeLength } },
+  { id: '2', position: Position.Top },
+  { id: '3', position: Position.Left },
+  { id: '4', position: Position.Right },
+  { id: '5', position: Position.Bottom, style: { left: leftNodeLength } },
+  { id: '6', position: Position.Bottom },
+  { id: '7', position: Position.Bottom, style: { left: rightNodeLength } }
 ]
 
 function CardNode ({ data, isConnectable }) {

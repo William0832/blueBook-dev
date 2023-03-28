@@ -12,7 +12,7 @@ const router = createHashRouter([
     element: <Root />,
     children: [
       {
-        path: 'blueBook/',
+        path: 'blueBook/:pId/:bpId',
         element: <Flow />
       }
     ]

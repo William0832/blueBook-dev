@@ -66,7 +66,7 @@ export default function NodeDialog ({ open, setOpen, category, createNode }) {
   useEffect(() => {
     if (open === false) {
       setName(() => '')
-      setTarget(() => null)
+      setTarget(null)
     }
   }, [open])
 

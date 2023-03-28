@@ -1,9 +1,7 @@
 import { Typography, Stack, Button, Menu, MenuItem } from '@mui/material'
 import { ArrowDropDown } from '@mui/icons-material'
 import { useState } from 'react'
-import { categories } from '../initState'
-// console.log({ categories })
-export default function FlowHead ({ openCreateModal, isInteracted, setIsInteracted }) {
+export default function FlowHead ({ openCreateModal, isInteracted, setIsInteracted, categories, onSave }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl)
   const onOpenMenu = (event) => {
@@ -64,6 +62,7 @@ export default function FlowHead ({ openCreateModal, isInteracted, setIsInteract
           onClick={() => setIsInteracted((value) => !value)}
         > {isInteracted ? '互動模式' : '編輯模式'}
         </Button>
+        <Button variant="contained" onClick={onSave}>SAVE</Button>
       </Stack>
     </div>
   )

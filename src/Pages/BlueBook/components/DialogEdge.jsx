@@ -6,10 +6,12 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
+
+import EdgeTypeSelector from './EdgeTypeSelector'
 import { Stack, InputLabel, MenuItem, FormControl, Select } from '@mui/material/'
 // import { edgeOptions } from '../initState'
 
-export default function EdgeDialog ({ open, setOpen, edgeTypes, nodes, createEdge, preConnect }) {
+export default function EdgeDialog ({ rf, open, setOpen, edgeTypes, nodes, createEdge, preConnect }) {
   const [name, setName] = useState('')
   const [edgeType, setEdgeType] = useState('')
   const [sourceId, setSourceId] = useState('')
@@ -39,7 +41,6 @@ export default function EdgeDialog ({ open, setOpen, edgeTypes, nodes, createEdg
     }
     // create
     if (preConnect) {
-      console.log(preConnect)
       const { sourceHandle, targetHandle } = preConnect
       const payload = {
         sourceHandle,
@@ -49,7 +50,7 @@ export default function EdgeDialog ({ open, setOpen, edgeTypes, nodes, createEdg
         target: targetId,
         edgeType
       }
-      createEdge(payload)
+      createEdge(rf, payload)
       setOpen(() => false)
       return
     }
@@ -64,7 +65,7 @@ export default function EdgeDialog ({ open, setOpen, edgeTypes, nodes, createEdg
       target: targetId,
       edgeType
     }
-    createEdge(payload)
+    createEdge(rf, payload)
     setOpen(() => false)
   }
 
@@ -161,33 +162,5 @@ function EdgeLinkInputs ({ preConnect, nodes, sourceId, setSourceId, targetId, s
         </Select>
       </FormControl>
     </>
-  )
-}
-
-function EdgeTypeSelector ({ setName, options, value, onChange }) {
-  const [color, setColor] = useState('')
-  const changeValueAndColor = (evt) => {
-    const target = options.find(opt => opt.id === evt.target.value)
-    setColor(() => target.color)
-    setName(() => target.label)
-    onChange(evt)
-  }
-  return (
-    <FormControl fullWidth>
-      <InputLabel id="edge-type-select-label">Type</InputLabel>
-      <Select
-        sx={{ color }}
-        labelId="edge-type-select-label"
-        id="edge-type-select"
-        value={value}
-        label="Type"
-        onChange={changeValueAndColor}
-      >
-        {options.map(opt => (
-          <MenuItem key={opt.id} value={opt.id} sx={{ color: opt.color }}>
-            {opt.label}
-          </MenuItem>))}
-      </Select>
-    </FormControl>
   )
 }
