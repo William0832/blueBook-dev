@@ -1,7 +1,10 @@
 import { Typography, Stack, Button, Menu, MenuItem } from '@mui/material'
 import { ArrowDropDown } from '@mui/icons-material'
 import { useState } from 'react'
+import useFlowStore from '../../../store/useFlowStore';
+
 export default function FlowHead ({ openCreateModal, isInteracted, setIsInteracted, categories, onSave }) {
+  const blueprintName = useFlowStore((state) => state.blueprintName)
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl)
   const onOpenMenu = (event) => {
@@ -16,10 +19,15 @@ export default function FlowHead ({ openCreateModal, isInteracted, setIsInteract
     setAnchorEl(null)
   }
   return (
-    <div className="border-b-2 flex p-2 relative">
-      <Typography variant="h5"
-        sx={{ paddingBlock: 1, paddingInline: 4 }}>
-        BlueBook
+    <div className="border-b-2 flex relative items-center">
+      <Typography variant=""
+        sx={{
+          textAlign: 'center',
+          paddingBlock: 2,
+          paddingInline: 2,
+          minWidth: '150px'
+        }}>
+        {blueprintName}
       </Typography>
 
       <Stack spacing={2}

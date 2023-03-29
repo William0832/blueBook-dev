@@ -45,6 +45,11 @@ const useFlowStore = create(
       isInteracted: false,
       loading: false,
       err: null,
+      blueprintName: 'blueBook',
+      // setBlueprintName: (name) => {
+      //   console.log(name)
+      //   set(() => ({ blueprintName: name }))
+      // },
       categories: [],
       projects: [], // { blueprints: [{}], id, name}
       tabs: [],
@@ -93,11 +98,12 @@ const useFlowStore = create(
           const { tabIndex } = get()
           set(() => ({ loading: true, pId, bpId }))
           const data = await getBlueprints({ pId, bpId })
+          const { bpName: blueprintName } = data.blueprint
           const tabs = data.blueprint.tabs
             .sort((a, b) => a.tabId - b.tabId)
           const { tabId, tabContent } = tabs[tabIndex]
           const { nodes, edges } = parseFlowContent(tabContent)
-          set(() => ({ loading: false, tabs, tabId, nodes, edges }))
+          set(() => ({ loading: false, tabs, tabId, nodes, edges, blueprintName }))
         } catch (err) {
           set(() => ({ loading: false, err }))
           console.warn(err)
