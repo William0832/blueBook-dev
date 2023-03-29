@@ -1,5 +1,4 @@
-import { v4 as uid } from 'uuid'
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import GridOnIcon from '@mui/icons-material/GridOn'
 
 import ReactFlow, {
@@ -89,6 +88,7 @@ export default function FlowPanel ({
     const fetchData = async () => {
       await fetchBlueprint({ bpId, pId })
     }
+    setTarget(null)
     if (tabs.length > 0) {
       const { tabId } = tabs[tabIndex]
       if (tabId == null) return
@@ -119,10 +119,10 @@ export default function FlowPanel ({
       </ReactFlowProvider>
       <ModifySideBar
         edgeTypes={edgeTypes}
-        target={target}
+        // target={target}
         modify={modify}
         remove={remove}
-        setTarget={setTarget}
+        // setTarget={setTarget}
         isInteracted={isInteracted}
         alertDownStreamNodes={alertDownStreamNodes}
       />

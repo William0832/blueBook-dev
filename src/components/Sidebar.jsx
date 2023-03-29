@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom"
-import { Typography, List, ListItem } from '@mui/material'
-import useFlowStore from "../store/useFlowStore"
+import { Typography, List, ListItem, Divider, ListItemIcon, ListItemText } from '@mui/material'
+import FolderIcon from '@mui/icons-material/Folder';
+import { firstToUpper } from '../utils'
 export default function Sidebar ({ projects }) {
   const logoSize = 30
   const handelLinkClass = ({ isActive }) => {
-    const linkClass = 'p-2 flex justify-center hover:bg-blue-100 duration-500 rounded-lg'
+    const linkClass = 'w-full p-2 flex duration-500 rounded-lg hover:bg-gray-200'
     return [
       linkClass,
       isActive ? 'router-link-active' : null
@@ -22,24 +23,35 @@ export default function Sidebar ({ projects }) {
       </div>
 
       <nav className="mt-4">
-        <Typography align="center">BlueBook</Typography>
+        {/* <Typography align="left" sx={{ pl: 1 }} variant="h5">BlueBook</Typography> */}
+        <Divider />
         <List>
           {projects.map((p, i) => (
-            <ListItem key={p.projId}>
-              <List >
-                <Typography sx={{ p: 1 }} >{p.projName || `project ${i + 1}`}
-                </Typography>
+            <ListItem key={p.projId} disablePadding divider>
+              <List sx={{ width: '100%', pl: 1, pb: 1 }}>
+                <ListItem disablePadding>
+                  <ListItemIcon sx={{ justifyContent: 'center' }}>
+                    <FolderIcon />
+                  </ListItemIcon>
+                  <ListItemText>{
+                    p.projName ||
+                    firstToUpper(`project ${i + 1}`)
+                  }</ListItemText>
+                </ListItem>
                 {p.blueprints.map((bp, j) => (
-                  <ListItem key={bp.bpId}>
+                  <ListItem disablePadding key={bp.bpId} sx={{ p: 1, pr: 2 }}>
                     <NavLink
                       to={`blueBook/${p.projId}/${bp.bpId}`}
                       className={handelLinkClass}>
-                      {bp.bpName || `bp ${j + 1}`}
+                      <Typography variant="body2">
+                        {bp.bpName || `bp ${j + 1}`}
+                      </Typography>
                     </NavLink>
                   </ListItem>
                 ))}
               </List>
             </ListItem>
+
           ))}
         </List>
       </nav>

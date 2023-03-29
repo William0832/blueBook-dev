@@ -15,25 +15,24 @@ export default function FlowTabs ({ addNewTab, isInteracted }) {
     setTabIndex(newValue)
   }
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex' }}>
-        <Tabs
-          value={tabIndex}
-          onChange={handleChange}
-          variant="scrollable"
-          scrollButtons="auto"
-        >
-          {tabs.map(tab => (
-            <Tab label={tab.tabTitle} key={tab.tabId} />
-          ))}
-        </Tabs>
-        <Button
-          disabled={isInteracted}
-          sx={{ maxWidth: '20px' }}
-          onClick={addNewTab}>
-          <AddIcon />
-        </Button>
-      </Box>
+    <Box sx={{ width: '100%', borderBottom: 1, borderColor: 'divider', display: 'flex' }}>
+      <Tabs
+        value={tabIndex}
+        onChange={handleChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        sx={{ width: '100%' }}
+      >
+        {tabs.map(tab => (
+          <Tab label={tab.tabTitle} key={tab.tabId} />
+        ))}
+      </Tabs>
+      <Button
+        disabled={isInteracted}
+        sx={{ maxWidth: '20px' }}
+        onClick={addNewTab}>
+        <AddIcon />
+      </Button>
     </Box>
-  );
+  )
 }

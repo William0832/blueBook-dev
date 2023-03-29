@@ -3,5 +3,11 @@
 @tailwind utilities;
 
 a.router-link-active {
-  color: cornflowerblue;
+  background: #aaa;
+  color: #fff;
+}
+
+.MuiListItem-root:has(a.router-link-active) {
+  box-shadow: 0 0 100px 0 rgba(0,0,0,0.1);
+  border-radius:5px;
 }

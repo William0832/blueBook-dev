@@ -66,3 +66,5 @@ export const parseFlowContent = (data) => {
 }
 
 export const getRandomItem = (list) => list[Math.floor(Math.random() * list.length)]
+
+export const firstToUpper = (string) => string.charAt(0).toUpperCase() + string.slice(1)

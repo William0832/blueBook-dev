@@ -6,8 +6,12 @@ import clsx from 'clsx'
 import EdgeTypeSelector from './EdgeTypeSelector'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import { Box, List, ListItem, ListItemText, Stack, Button, IconButton, FormGroup, FormControlLabel, Switch } from '@mui/material'
+import useFlowStore from '../../../store/useFlowStore'
+import { shallow } from 'zustand/shallow'
 
-export default function ModifySideBar ({ target, modify, remove, setTarget, isInteracted, alertDownStreamNodes, edgeTypes }) {
+export default function ModifySideBar ({ modify, remove, isInteracted, alertDownStreamNodes, edgeTypes }) {
+
+  const { target, setTarget, tabId } = useFlowStore((state) => ({ ...state }), shallow)
   const isEdgeTarget = useMemo(() => target ? isEdge(target) : null, [target])
   const [isOpen, setIsOpen] = useState(false)
   const [name, setName] = useState('')
@@ -36,7 +40,9 @@ export default function ModifySideBar ({ target, modify, remove, setTarget, isIn
     remove(target)
     setTarget(null)
   }
-
+  useEffect(() => {
+    setTarget(null)
+  }, [tabId])
   useEffect(() => {
     if (!target) {
       setIsAlert(() => false)
