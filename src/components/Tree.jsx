@@ -101,7 +101,8 @@ export default function CustomizedTreeView ({ data }) {
             label={
               e.projName ||
               firstToUpper(`project ${i + 1}`)
-            } key={i}>
+            } key={i}
+          >
             {
               e.blueprints.map((bp, j) => (
                 <NavLink

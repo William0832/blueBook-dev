@@ -12,15 +12,24 @@ a.router-link-active {
   border-radius:5px;
 } */
 
-  .btn {
-    @apply font-bold text-sm py-2 px-4 rounded whitespace-nowrap max-h-[45px];
-  }
-  .btn-blue {
-    @apply bg-blue-500 text-white;
-  }
-  .btn-sm {
-    @apply px-2 py-1
-  }
-  .btn-blue:hover {
-    @apply bg-blue-700;
-  }
+
+.MuiTreeItem-label {
+  padding-block: .2rem;
+  font-size: 1px !important;
+}
+ul[role="tree"] > li > .MuiTreeItem-content .MuiTreeItem-label  {
+  font-size: 1rem !important;
+}
+
+.btn {
+  @apply font-bold text-sm py-2 px-4 rounded whitespace-nowrap max-h-[45px];
+}
+.btn-blue {
+  @apply bg-blue-500 text-white;
+}
+.btn-sm {
+  @apply px-2 py-1
+}
+.btn-blue:hover {
+  @apply bg-blue-700;
+}

@@ -40,7 +40,7 @@ export default function FlowHead ({ setOpenTabDialog, openCreateModal, isInterac
           variant={menuOpen ? 'contained' : 'outlined'}
           endIcon={<ArrowDropDown />}
           onClick={onOpenMenu}
-        > + 新增設備
+        > 新增物件
         </Button>
         <Menu
           anchorEl={anchorEl}
@@ -63,7 +63,7 @@ export default function FlowHead ({ setOpenTabDialog, openCreateModal, isInterac
           size="small"
           variant="contained"
           onClick={() => onMenuBtnClick()}>
-          + 新增上下游關係
+          編輯物件關聯
         </Button>
         <Button
           className="btn"

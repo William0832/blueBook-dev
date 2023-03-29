@@ -15,13 +15,16 @@ export default function Sidebar ({ projects }) {
   }
 
   return (
-    <div id="sidebar" className="flex-col p-2 w-[200px] flex-shrink-0 border-r-2">
+    <div id="sidebar" className="flex-col p-2 w-[240px] flex-shrink-0 border-r-2">
       <div className="flex items-center">
         <img
-          className={`w-[${logoSize}px] h-[${logoSize}]px`}
+          className={`w-[${logoSize}px] h-[${logoSize}]px ml-2`}
           src="./logo.png" alt="FCOP logo"
         />
-        <Typography variant="h6" sx={{ paddingLeft: 2 }}>FCOP</Typography>
+        <Typography variant="h6"
+          sx={{ paddingLeft: 2, fontWeight: 700 }}>
+          FCOP
+        </Typography>
       </div>
       <nav className="mt-4">
         <Divider />
