@@ -89,11 +89,11 @@ export default function CustomizedTreeView ({ data }) {
   return (
     <TreeView
       aria-label="customized"
-      defaultExpanded={['1', ':r1:-5']}
+      defaultExpanded={['1', '2', '3', '4', '5']}
       defaultCollapseIcon={<MinusSquare />}
       defaultExpandIcon={<PlusSquare />}
       defaultEndIcon={<CloseSquare />}
-      sx={{ height: 500, flexGrow: 1, maxWidth: '100%', overflowY: 'auto' }}
+      sx={{ height: 500, flexGrow: 1, maxWidth: '100%', overflowY: 'auto', mt: 1 }}
     >
       <StyledTreeItem nodeId="1" label="BlueBook">
         {data.map((e, i) => (
@@ -109,7 +109,7 @@ export default function CustomizedTreeView ({ data }) {
                   key={j}
                   to={`blueBook/${e.projId}/${bp.bpId}`}
                 >
-                  <Typography variant="body2">
+                  <Typography sx={{ fontSize: 1 }}>
                     {bp.bpName || `bp ${j + 1}`}
                   </Typography>
                 </NavLink>

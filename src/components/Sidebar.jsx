@@ -25,7 +25,7 @@ export default function Sidebar ({ projects }) {
       </div>
       <nav className="mt-4">
         <Divider />
-        <Tree data={projects} />
+        <Tree data={projects} className="mt-2" />
       </nav>
     </div>
   )

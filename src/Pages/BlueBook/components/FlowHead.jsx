@@ -20,7 +20,8 @@ export default function FlowHead ({ openCreateModal, isInteracted, setIsInteract
   }
   return (
     <div className="border-b-2 flex relative items-center">
-      <Typography variant=""
+      <Typography
+        variant='body2'
         sx={{
           textAlign: 'center',
           paddingBlock: 2,
