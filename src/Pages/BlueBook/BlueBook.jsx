@@ -11,8 +11,10 @@ import DialogTabName from './components/DialogTabName'
 import useFlowStore from '../../store/useFlowStore'
 import { shallow } from 'zustand/shallow'
 import LoadingPage from '../../components/LoadingPage'
+import { useOutletContext } from 'react-router-dom'
 
 export default function BlueBook () {
+  const { sideBarWidth } = useOutletContext()
   const { pId, bpId } = useParams()
   const [openTabDialog, setOpenTabDialog] = useState(false)
   const { loading, err, blueprintName, categories, fetchBlueprint, createBlueprint, save, tabIndex, setTabIndex } = useFlowStore(
@@ -64,15 +66,15 @@ export default function BlueBook () {
       <LoadingPage loading={loading} />
       <Stack className="w-full">
         <Typography
-          variant='body2'
           sx={{
-            paddingBlock: .8,
             paddingInline: 2,
-            minWidth: '150px'
+            paddingTop: '.5rem',
+            fontSize: '1rem'
           }}>
           {blueprintName}
         </Typography>
         <FlowTabs
+          sideBarWidth={sideBarWidth}
           addNewTab={addNewTab}
           isInteracted={isInteracted}
         />

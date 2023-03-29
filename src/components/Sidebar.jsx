@@ -4,7 +4,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { firstToUpper } from '../utils'
 import Tree from './Tree'
 
-export default function Sidebar ({ projects }) {
+export default function Sidebar ({ projects, width = 240 }) {
   const logoSize = 30
   const handelLinkClass = ({ isActive }) => {
     const linkClass = 'w-full p-2 flex duration-500 rounded-lg hover:bg-gray-200'
@@ -15,7 +15,7 @@ export default function Sidebar ({ projects }) {
   }
 
   return (
-    <div id="sidebar" className="flex-col p-2 w-[240px] flex-shrink-0 border-r-2">
+    <div id="sidebar" className={`flex-col p-2 w-[${width}px] flex-shrink-0 border-r-2`} >
       <div className="flex items-center">
         <img
           className={`w-[${logoSize}px] h-[${logoSize}]px ml-2`}
@@ -30,6 +30,6 @@ export default function Sidebar ({ projects }) {
         <Divider />
         <Tree data={projects} className="mt-2" />
       </nav>
-    </div>
+    </ div>
   )
 }

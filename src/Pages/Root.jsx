@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar'
 import useFlowStore from '../store/useFlowStore'
 import { shallow } from 'zustand/shallow'
 
+const sideBarWidth = 200
 export default function Root () {
   const { loading, err, projects, fetchProjects, fetchCategories } = useFlowStore(
     (state) => ({
@@ -30,8 +31,8 @@ export default function Root () {
   }, [])
   return (
     <div className="flex h-[100vh]">
-      <Sidebar projects={projects} />
-      <Outlet className="flex-grow" />
+      <Sidebar projects={projects} width={sideBarWidth} />
+      <Outlet className="flex-grow" context={{ sideBarWidth }} />
     </div>
   )
 }
