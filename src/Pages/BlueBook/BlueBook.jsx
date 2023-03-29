@@ -3,20 +3,19 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 
-import { Stack } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import FlowTabs from './components/FlowTabs'
 import FlowPanel from './components/FlowPanel'
-import FlowHead from './components/FlowHead'
-
+import FlowBtns from './components/FlowBtns'
+import DialogTabName from './components/DialogTabName'
 import useFlowStore from '../../store/useFlowStore'
 import { shallow } from 'zustand/shallow'
 import LoadingPage from '../../components/LoadingPage'
-import { parseFlowContent } from '../../utils';
 
 export default function BlueBook () {
   const { pId, bpId } = useParams()
-
-  const { loading, err, categories, fetchBlueprint, createBlueprint, save, tabIndex, setTabIndex } = useFlowStore(
+  const [openTabDialog, setOpenTabDialog] = useState(false)
+  const { loading, err, blueprintName, categories, fetchBlueprint, createBlueprint, save, tabIndex, setTabIndex } = useFlowStore(
     (state) => ({
       ...state
     }),
@@ -64,16 +63,26 @@ export default function BlueBook () {
     <>
       <LoadingPage loading={loading} />
       <Stack className="w-full">
-        <FlowHead
+        <Typography
+          variant='body2'
+          sx={{
+            paddingBlock: .8,
+            paddingInline: 2,
+            minWidth: '150px'
+          }}>
+          {blueprintName}
+        </Typography>
+        <FlowTabs
+          addNewTab={addNewTab}
+          isInteracted={isInteracted}
+        />
+        <FlowBtns
           categories={categories}
           isInteracted={isInteracted}
           openCreateModal={openCreateModal}
           setIsInteracted={setIsInteracted}
           onSave={onSave}
-        />
-        <FlowTabs
-          addNewTab={addNewTab}
-          isInteracted={isInteracted}
+          setOpenTabDialog={setOpenTabDialog}
         />
         <FlowPanel
           tabIndex={tabIndex}
@@ -87,6 +96,7 @@ export default function BlueBook () {
           setGridOpen={setGridOpen}
         />
       </Stack>
+      <DialogTabName open={openTabDialog} setOpen={setOpenTabDialog} />
     </>
   )
 }

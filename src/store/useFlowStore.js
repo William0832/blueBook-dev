@@ -136,12 +136,25 @@ const useFlowStore = create(
           title = title || tab?.tabTitle
           content = content || { nodes, edges }
           const data = await updateBlueprint({ pId, bpId, tabId, title, content })
-          set(() => ({ loading: false }))
+          console.log(data)
+          set((state) => ({
+            loading: false,
+            tabs: tabs.map(tab => ({
+              ...tab,
+              tabTitle: tab.tabId === tabId
+                ? title : tab.tabTitle,
+              tabContent: tab.tabId === tabId
+                ? JSON.stringify(content) : tab.tabContent
+            }))
+          }))
         } catch (err) {
           console.warn(err)
           set(() => ({ loading: false, err }))
         }
       },
+      // changeTabName: async ({ name }) => {
+
+      // },
       // CUD nodes-edges
       createNode: async ({ category, name, target, isAlert }) => {
         const { nodes, save } = get()

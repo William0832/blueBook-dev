@@ -3,7 +3,7 @@ import { ArrowDropDown } from '@mui/icons-material'
 import { useState } from 'react'
 import useFlowStore from '../../../store/useFlowStore';
 
-export default function FlowHead ({ openCreateModal, isInteracted, setIsInteracted, categories, onSave }) {
+export default function FlowHead ({ setOpenTabDialog, openCreateModal, isInteracted, setIsInteracted, categories, onSave }) {
   const blueprintName = useFlowStore((state) => state.blueprintName)
   const [anchorEl, setAnchorEl] = useState(null);
   const menuOpen = Boolean(anchorEl)
@@ -20,22 +20,20 @@ export default function FlowHead ({ openCreateModal, isInteracted, setIsInteract
   }
   return (
     <div className="border-b-2 flex relative items-center">
-      <Typography
-        variant='body2'
-        sx={{
-          textAlign: 'center',
-          paddingBlock: 2,
-          paddingInline: 2,
-          minWidth: '150px'
-        }}>
-        {blueprintName}
-      </Typography>
 
       <Stack spacing={2}
         direction="row"
-        sx={{ height: 45 }}
+        sx={{ padding: 1 }}
       >
         <Button
+          onClick={() => setOpenTabDialog(() => true)}
+          className="btn"
+          disabled={isInteracted}
+          variant="contained">
+          編輯 tab
+        </Button>
+        <Button
+          className="btn"
           disabled={isInteracted}
           variant={menuOpen ? 'contained' : 'outlined'}
           endIcon={<ArrowDropDown />}
@@ -58,6 +56,7 @@ export default function FlowHead ({ openCreateModal, isInteracted, setIsInteract
         </Menu>
 
         <Button
+          className="btn"
           disabled={isInteracted}
           size="small"
           variant="contained"
@@ -65,13 +64,15 @@ export default function FlowHead ({ openCreateModal, isInteracted, setIsInteract
           + 新增上下游關係
         </Button>
         <Button
+          className="btn"
           sx={{ fontSize: 'px', paddingInline: 2, whiteSpace: "nowrap" }}
           size="small"
           variant={isInteracted ? 'outlined' : 'contained'}
           onClick={() => setIsInteracted((value) => !value)}
         > {isInteracted ? '互動模式' : '編輯模式'}
         </Button>
-        <Button variant="contained" onClick={onSave}>SAVE</Button>
+        <Button
+          className="btn" variant="contained" onClick={onSave}>SAVE</Button>
       </Stack>
     </div>
   )
