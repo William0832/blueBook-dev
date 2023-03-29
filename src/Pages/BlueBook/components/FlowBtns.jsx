@@ -1,7 +1,8 @@
-import { Typography, Stack, Button, Menu, MenuItem } from '@mui/material'
+import { Stack, Button, Menu, MenuItem } from '@mui/material'
 import { ArrowDropDown } from '@mui/icons-material'
 import { useState } from 'react'
-import useFlowStore from '../../../store/useFlowStore';
+import useFlowStore from '../../../store/useFlowStore'
+import SettingsIcon from '@mui/icons-material/Settings'
 
 export default function FlowHead ({ setOpenTabDialog, openCreateModal, isInteracted, setIsInteracted, categories, onSave }) {
   const blueprintName = useFlowStore((state) => state.blueprintName)
@@ -26,6 +27,7 @@ export default function FlowHead ({ setOpenTabDialog, openCreateModal, isInterac
         sx={{ padding: 1 }}
       >
         <Button
+          startIcon={<SettingsIcon />}
           onClick={() => setOpenTabDialog(() => true)}
           className="btn"
           disabled={isInteracted}
