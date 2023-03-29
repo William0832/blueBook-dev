@@ -1,9 +1,9 @@
 import { MarkerType } from 'reactflow'
 import CardNode from './components/CardNode/index'
 
-export const nodeTypes = { 'card': CardNode }
+const nodeTypes = { 'card': CardNode }
 
-export const edgeTypes = [
+const edgeTypes = [
   { id: 'electric', label: '電力', color: 'gold' },
   { id: 'water', label: '水', color: 'lightskyblue' },
   { id: 'chemical1', label: '化學原料1', color: 'cyan' },
@@ -14,7 +14,7 @@ export const edgeTypes = [
   // { id: 'lowLight', label: '警示', color: 'red' }
 ]
 
-export const edgeOptions = {
+const edgeOptions = {
   type: 'step',
   style: {
     strokeWidth: '2',
@@ -28,6 +28,11 @@ export const edgeOptions = {
   }
 }
 
-export const connectionLineStyle = { stroke: '#646cff' }
+const connectionLineStyle = { stroke: '#646cff' }
 
-
+export {
+  nodeTypes,
+  edgeTypes,
+  edgeOptions,
+  connectionLineStyle
+}

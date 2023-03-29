@@ -3,8 +3,8 @@ import {
   createHashRouter,
   RouterProvider,
 } from "react-router-dom"
-import Root from '../pages/Root'
-import Flow from '../pages/BlueBook/BlueBook'
+import Root from '../pages/root.jsx'
+import BlueBook from '../pages/blueBook/blueBook.jsx'
 
 const router = createHashRouter([
   {
@@ -13,7 +13,7 @@ const router = createHashRouter([
     children: [
       {
         path: 'blueBook/:pId/:bpId',
-        element: <Flow />
+        element: <BlueBook />
       }
     ]
   },

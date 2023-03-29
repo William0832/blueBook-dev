@@ -22,7 +22,11 @@ export default function Sidebar ({ projects, width = 240 }) {
           src="./logo.png" alt="FCOP logo"
         />
         <Typography variant="h6"
-          sx={{ paddingLeft: 2, fontWeight: 700 }}>
+          sx={{
+            letterSpacing: 1,
+            paddingLeft: 2,
+            fontWeight: 700
+          }}>
           FCOP
         </Typography>
       </div>
@@ -30,6 +34,6 @@ export default function Sidebar ({ projects, width = 240 }) {
         <Divider />
         <Tree data={projects} className="mt-2" />
       </nav>
-    </ div>
+    </div>
   )
 }

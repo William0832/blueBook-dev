@@ -1,4 +1,4 @@
-export const getNodeStyle = (todoType) => {
+const getNodeStyle = (todoType) => {
   const defaultNodeOptions = {
     borderRadius: '10px',
     fontWeight: 700
@@ -33,7 +33,7 @@ export const getNodeStyle = (todoType) => {
   }
 }
 
-export const getEdgeStyle = (edgeType) => {
+const getEdgeStyle = (edgeType) => {
   // '電力 淺黃色(gold)
   switch (edgeType) {
     case 'electric':
@@ -55,7 +55,7 @@ export const getEdgeStyle = (edgeType) => {
   }
 }
 
-export const parseFlowContent = (data) => {
+const parseFlowContent = (data) => {
   const parsedData = JSON.parse(data)
   const result = { edges: [], nodes: [] }
   if (parsedData == null) return result
@@ -65,6 +65,14 @@ export const parseFlowContent = (data) => {
   return result
 }
 
-export const getRandomItem = (list) => list[Math.floor(Math.random() * list.length)]
+const getRandomItem = (list) => list[Math.floor(Math.random() * list.length)]
 
-export const firstToUpper = (string) => string.charAt(0).toUpperCase() + string.slice(1)
+const firstToUpper = (string) => string.charAt(0).toUpperCase() + string.slice(1)
+
+export {
+  getNodeStyle,
+  getEdgeStyle,
+  parseFlowContent,
+  getRandomItem,
+  firstToUpper
+}

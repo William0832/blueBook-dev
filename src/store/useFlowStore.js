@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { devtools } from "zustand/middleware"
 import { v4 as uid } from 'uuid'
 import { getEdgeStyle, getRandomItem } from '../utils'
-import { edgeOptions } from '../pages/BlueBook/initState'
+import { edgeOptions } from '../pages/blueBook/initState'
 import {
   isNode,
   // addEdge,
