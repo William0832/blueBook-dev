@@ -26,7 +26,29 @@ const getNodeHandles = ({ rf, source, target, sourceHandle, targetHandle }) => {
     targetHandle: getRandomItem(sourceHandles)?.id
   }
 }
+const setEdgeAlert = (edge, isAlert = true) => {
+  const style = getEdgeStyle(edge.data.edgeType)
+  return {
+    ...edge,
+    data: {
+      ...edge.data, isAlert
+    },
+    style: {
+      ...edge.style,
+      stroke: isAlert ? 'red' : style['stroke']
+    },
+    markerEnd: {
+      ...edge.markerEnd,
+      color: isAlert ? 'red' : style['stroke']
+    }
+  }
+}
 
+const setLevelDownEdgesAlert = (nodeId, edges, isAlert = true) => {
+  return edges
+    .filter(edg => edg.source === nodeId)
+    .map(edge => setEdgeAlert(edge, isAlert))
+}
 const useFlowStore = create(
   devtools((set, get) => {
     const requestHandler = async (key, apiCallback, payload) => {
@@ -136,7 +158,7 @@ const useFlowStore = create(
           title = title || tab?.tabTitle
           content = content || { nodes, edges }
           const data = await updateBlueprint({ pId, bpId, tabId, title, content })
-          console.log(data)
+          // console.log(data)
           set((state) => ({
             loading: false,
             tabs: tabs.map(tab => ({
@@ -206,11 +228,11 @@ const useFlowStore = create(
       modify: async (element, payload) => {
         const { id } = element
         const isNodeTarget = isNode(element)
-        const { save } = get()
+        const { save, nodes, edges } = get()
         if (isNodeTarget) {
-          const { nodes } = get()
           const { name, isAlert } = payload
           const newName = name || element?.data?.label
+          const modifyEdges = setLevelDownEdgesAlert(id, edges, isAlert)
           set(() => ({
             target: null,
             nodes: nodes.map(e => ({
@@ -221,11 +243,14 @@ const useFlowStore = create(
                 isAlert: e.id === id ? isAlert : e.data.isAlert
               }
             })),
+            edges: edges.map(edge => {
+              const modifyEdge = modifyEdges.find(m => m.id === edge.id)
+              return modifyEdge ? modifyEdge : edge
+            })
           }))
           await save({})
           return
         }
-        const { edges } = get()
         let { name, isAlert, edgeType, target, targetHandle, source, sourceId } = payload
         set(() => ({
           target: null,
