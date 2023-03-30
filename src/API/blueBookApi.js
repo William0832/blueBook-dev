@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://35.78.105.45:8080/bluebook'
+  baseURL: 'https://35.78.105.45:8080/bluebook'
 })
 
 // api.interceptors.request.use(config => config)
