@@ -159,7 +159,6 @@ function Flow ({
     >
       <Controls style={{ fill: "#fff", color: '#fff' }}>
         <ControlButton
-          sx={{ fill: "#fff", color: '#fff', '&:hover': { fill: '#000', color: '#000' } }}
           onClick={() => setGridOpen((value => !value))}>
           <GridOnIcon />
         </ControlButton>

@@ -12,7 +12,31 @@ import {
 import { parseFlowContent } from '../utils';
 import { getCategories, getProjectList, getBlueprints, addBlueprint, updateBlueprint } from '../API/blueBookApi'
 
-
+const updateNodeByNewCategories = (nodes, categories) => {
+  const updateKeys = [
+    'metadata', 'objectImage', 'objectImageAlarm',
+    'objectName', 'objectNameEN', 'objectType'
+  ]
+  return nodes.map(nd => {
+    const { data } = nd
+    const { categoryId, objectId } = data
+    const target = categories
+      .find(e => e.categoryId === categoryId).objectList
+      .find(e => e.objectId === objectId)
+    const newData = updateKeys.reduce((obj, key) => {
+      const value = target[key]
+      if (value) obj[key] = value
+      return obj
+    }, {})
+    return {
+      ...nd,
+      data: {
+        ...nd.data,
+        ...newData
+      }
+    }
+  })
+}
 const getHandles = (node) => {
   const symbolProp = Object.getOwnPropertySymbols(node)[0]
   return node[symbolProp].handleBounds?.source
@@ -68,10 +92,6 @@ const useFlowStore = create(
       loading: false,
       err: null,
       blueprintName: 'blueBook',
-      // setBlueprintName: (name) => {
-      //   console.log(name)
-      //   set(() => ({ blueprintName: name }))
-      // },
       categories: [],
       projects: [], // { blueprints: [{}], id, name}
       tabs: [],
@@ -86,12 +106,8 @@ const useFlowStore = create(
       tabIndex: 0,
       setTarget: (el) => set(() => ({ target: el })),
       setTabIndex: (index) => {
-        const { tabs } = get()
-        const { tabContent, tabId } = tabs[index]
-        const data = parseFlowContent(tabContent)
-        set(() => ({ tabIndex: index, ...data, tabId }))
+        set(() => ({ tabIndex: index }))
       },
-      setTabIndex: (index) => set(() => ({ tabIndex: index })),
       setTabId: (id) => {
         if (!id) return
         set(() => ({ tabId: id }))
@@ -117,7 +133,11 @@ const useFlowStore = create(
       fetchBlueprint: async ({ pId, bpId }) => {
         try {
           if (!pId || !bpId) return
-          const { tabIndex } = get()
+          const { tabIndex, fetchCategories } = get()
+          if (get().categories.length === 0) {
+            await fetchCategories()
+          }
+          const { categories } = get()
           set(() => ({ loading: true, pId, bpId }))
           const data = await getBlueprints({ pId, bpId })
           const { bpName: blueprintName } = data.blueprint
@@ -125,7 +145,11 @@ const useFlowStore = create(
             .sort((a, b) => a.tabId - b.tabId)
           const { tabId, tabContent } = tabs[tabIndex]
           const { nodes, edges } = parseFlowContent(tabContent)
-          set(() => ({ loading: false, tabs, tabId, nodes, edges, blueprintName }))
+          set(() => ({
+            loading: false, tabs, tabId,
+            nodes: updateNodeByNewCategories(nodes, categories),
+            edges, blueprintName
+          }))
         } catch (err) {
           set(() => ({ loading: false, err }))
           console.warn(err)
@@ -158,7 +182,6 @@ const useFlowStore = create(
           title = title || tab?.tabTitle
           content = content || { nodes, edges }
           const data = await updateBlueprint({ pId, bpId, tabId, title, content })
-          // console.log(data)
           set((state) => ({
             loading: false,
             tabs: tabs.map(tab => ({
