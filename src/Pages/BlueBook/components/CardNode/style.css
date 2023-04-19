@@ -50,6 +50,18 @@
   opacity: 1;
 }
 
+.react-flow__node-card .react-flow__handle.connected {
+  opacity: 1;
+}
+
+.react-flow__node-card .react-flow__handle.around {
+  opacity: 1;
+  background: red;
+  width: calc(var(--handel-size)*1.8);
+  height: calc(var(--handel-size)*1.8);
+}
+
+
 
 /*  edge */
 .react-flow__edge .react-flow__edge-path {
@@ -60,7 +72,3 @@
 .react-flow__edge.selected .react-flow__edge-path {
   stroke-width: 4 !important;
 }
-
-/* .react-flow__arrowhead > polyline {
-  stroke: #ccc;
-} */

@@ -1,27 +1,62 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Handle, Position } from 'reactflow'
 import {
   Badge, Card, CardMedia, CardContent, Typography,
 } from '@mui/material'
 import './style.css'
-import { v4 as uuid } from 'uuid'
+import useFlowStore from '../../../../store/useFlowStore'
+import { shallow } from 'zustand/shallow'
 
 const nodeWidth = 150
 const nodeHeight = nodeWidth * 1.2
 const nodeImgHeight = nodeHeight * 0.6
 const leftNodeLength = 25
 const rightNodeLength = nodeWidth - leftNodeLength
+const insertLength = 0
 const defaultHandles = [
-  { id: '1', position: Position.Top, style: { left: leftNodeLength } },
-  { id: '2', position: Position.Top },
-  { id: '3', position: Position.Left },
-  { id: '4', position: Position.Right },
-  { id: '5', position: Position.Bottom, style: { left: leftNodeLength } },
-  { id: '6', position: Position.Bottom },
-  { id: '7', position: Position.Bottom, style: { left: rightNodeLength } }
+  {
+    id: '1', position: Position.Top,
+    style: { left: leftNodeLength, top: insertLength }
+  },
+  {
+    id: '2', position: Position.Top,
+    style: { top: insertLength }
+  },
+  {
+    id: '3', position: Position.Top,
+    style: { left: rightNodeLength, top: insertLength }
+  },
+  {
+    id: '4', position: Position.Left,
+    style: { left: insertLength }
+  },
+  {
+    id: '5', position: Position.Right,
+    style: { right: insertLength }
+  },
+  {
+    id: '6', position: Position.Bottom,
+    style: { left: leftNodeLength, bottom: insertLength }
+  },
+  {
+    id: '7', position: Position.Bottom,
+    style: { bottom: insertLength }
+  },
+  {
+    id: '8', position: Position.Bottom,
+    style: { left: rightNodeLength, bottom: insertLength }
+  }
 ]
 
 function CardNode ({ data, isConnectable }) {
+  const { isConnectedStart, aroundNodeId, aroundHandelId } = useFlowStore((state) => ({
+    isConnectedStart: state.isConnectedStart,
+    //   aroundHandelId: state.aroundHandelId,
+    //   aroundNodeId: state.aroundNodeId
+  }), shallow)
+  // const isAroundHandel = useCallback(
+  //   (handelId) => data.id === aroundNodeId && handelId === aroundHandelId, [aroundHandelId]
+  // )
   const imgSrc = useMemo(() => {
     const src = data.isAlert ? data.objectImageAlarm : data.objectImage
     return `./imgs/${src}`
@@ -56,6 +91,7 @@ function CardNode ({ data, isConnectable }) {
             position={e.position}
             isConnectable={isConnectable}
             style={e.style}
+            className={`${isConnectedStart ? 'connected' : ''}`}
           />
         ))
       }

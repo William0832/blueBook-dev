@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://bluebook.fcop.io'
+  baseURL: 'https://bluebook.fcop.io/bluebook'
 })
 
 // api.interceptors.request.use(config => config)
@@ -37,7 +37,7 @@ api.interceptors.response.use(
 
 export async function getCategories () {
   try {
-    const data = await api('objects')
+    const data = await api('/objects')
     return data
   } catch (err) {
     console.warn(err)
@@ -46,7 +46,7 @@ export async function getCategories () {
 
 export async function getProjectList () {
   try {
-    const data = await api('projects')
+    const data = await api('/projects')
     return data
   } catch (err) {
     console.warn(err)

@@ -1,10 +1,11 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import GridOnIcon from '@mui/icons-material/GridOn'
+// import { getHandles, getDistance } from '../../../utils'
 
 import ReactFlow, {
   Background, Controls, ControlButton,
   ReactFlowProvider, useReactFlow,
-  ConnectionMode
+  ConnectionMode, updateEdge
 } from 'reactflow'
 
 import { Stack } from '@mui/material'
@@ -27,7 +28,7 @@ export default function FlowPanel ({
   tabIndex, nodeDialogOpen, setNodeDialogOpen, nodeType,
   gridOpen, setGridOpen, isInteracted, edgeDialogOpen, setEdgeDialogOpen,
 }) {
-  const { bpId, pId, nodes, edges, setTabId, tabs, remove, target, setTarget, modify, preConnect, setPreConnect, fetchBlueprint } = useFlowStore((state) => ({
+  const { bpId, pId, nodes, edges, setTabId, tabs, remove, target, setTarget, modify, preConnect, setPreConnect, fetchBlueprint, setEdges } = useFlowStore((state) => ({
     ...state
   }), shallow)
 
@@ -136,26 +137,72 @@ function Flow ({
   edgeDialogOpen, setEdgeDialogOpen,
 }) {
   const { nodes, edges, onNodesChange, onEdgesChange, createNode, createEdge,
-    preConnect } = useFlowStore((state) => ({
+    preConnect, setIsConnectedStart, setEdges } = useFlowStore((state) => ({
       ...state
     }), shallow)
 
   const rf = useReactFlow()
+  // const onNodeLeave = useCallback((e, node) => {
+  //   setAround(null, null)
+  // }, [])
+  // const onNodeEnter = useCallback((e, node) => {
+  //   const { id, position } = node
+  //   const { x: nodeX, y: nodeY } = position
+  //   const { x: viewX, y: viewY, zoom } = rf.getViewport()
+  //   let { offsetX, offsetY } = e.nativeEvent
+  //   offsetX = (offsetX - viewX) / zoom
+  //   offsetY = (offsetY - viewY) / zoom
+  //   const handles = getHandles(rf.getNode(id))
+  //   const closestHandel = handles.reduce((data, curr) => {
+  //     const { x, y, id } = curr
+  //     const distance = getDistance(
+  //       [x + nodeX, y + nodeY],
+  //       [offsetX, offsetY]
+  //     )
+  //     if (!data.distance || data.distance > distance) {
+  //       return { id, distance, ...curr }
+  //     }
+  //     return data
+  //   }, { id: null, distance: null })
+  //   setAround(id, closestHandel.id)
+  // }, [])
 
+  // drag update edge
+  const edgeUpdateSuccessful = useRef(true)
+  const onEdgeUpdateStart = useCallback(() => {
+    edgeUpdateSuccessful.current = false
+  }, [])
+  const onEdgeUpdate = useCallback((oldEdge, newConnection) => {
+    edgeUpdateSuccessful.current = true
+    setEdges(oldEdge, newConnection)
+  }, [])
+
+  const onEdgeUpdateEnd = useCallback((ev, edge) => {
+    if (!edgeUpdateSuccessful.current) {
+      setEdges(edge)
+    }
+    edgeUpdateSuccessful.current = true
+  }, [])
   return (
     <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      onNodeClick={(evt, target) => clickTarget(target)}
-      onEdgeClick={(evt, target) => clickTarget(target)}
-      connectionMode={ConnectionMode.Loose}
       className="transition"
       nodeTypes={nodeTypes}
+      nodes={nodes}
+      onNodesChange={onNodesChange}
+      onNodeClick={(evt, target) => clickTarget(target)}
+      edges={edges}
+      onEdgesChange={onEdgesChange}
+      onEdgeClick={(evt, target) => clickTarget(target)}
+      onEdgeUpdate={onEdgeUpdate}
+      onEdgeUpdateStart={onEdgeUpdateStart}
+      onEdgeUpdateEnd={onEdgeUpdateEnd}
       defaultEdgeOptions={edgeOptions}
+      connectionMode={ConnectionMode.Loose}
+      onConnect={onConnect}
       connectionLineStyle={connectionLineStyle}
+      connectionRadius={40}
+      onConnectStart={setIsConnectedStart}
+      onConnectEnd={setIsConnectedStart}
     >
       <Controls style={{ fill: "#fff", color: '#fff' }}>
         <ControlButton

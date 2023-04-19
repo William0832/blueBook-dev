@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { devtools } from "zustand/middleware"
 import { v4 as uid } from 'uuid'
-import { getEdgeStyle, getRandomItem } from '../utils'
+import { getEdgeStyle, getRandomItem, getNodeHandles } from '../utils'
 import { edgeOptions } from '../pages/blueBook/initState'
 import {
   isNode,
@@ -31,25 +31,14 @@ const updateNodeByNewCategories = (nodes, categories) => {
     return {
       ...nd,
       data: {
+        id: nd.id,
         ...nd.data,
         ...newData
       }
     }
   })
 }
-const getHandles = (node) => {
-  const symbolProp = Object.getOwnPropertySymbols(node)[0]
-  return node[symbolProp].handleBounds?.source
-}
-const getNodeHandles = ({ rf, source, target, sourceHandle, targetHandle }) => {
-  if (sourceHandle && targetHandle) return { sourceHandle, targetHandle }
-  const targetHandles = getHandles(rf.getNode(target))
-  const sourceHandles = getHandles(rf.getNode(source))
-  return {
-    sourceHandle: getRandomItem(targetHandles)?.id,
-    targetHandle: getRandomItem(sourceHandles)?.id
-  }
-}
+
 const setEdgeAlert = (edge, isAlert = true) => {
   const style = getEdgeStyle(edge.data.edgeType)
   return {
@@ -88,6 +77,17 @@ const useFlowStore = create(
       }
     }
     return {
+      isConnectedStart: false,
+      setIsConnectedStart: () => {
+        const { isConnectedStart } = get()
+        set(() => ({ isConnectedStart: !isConnectedStart }))
+      },
+      aroundNodeId: null,
+      aroundHandelId: null,
+      setAround: (nId, hId) => set(() => ({
+        aroundNodeId: nId,
+        aroundHandelId: hId
+      })),
       isInteracted: false,
       loading: false,
       err: null,
@@ -247,6 +247,27 @@ const useFlowStore = create(
         }
         set(() => ({ preConnect: null, edges: edges.concat(newEdge) }))
         await save({})
+      },
+      setEdges: async (oldEdge, newConnection) => {
+        try {
+          if (!newConnection) return
+          const { source, target } = newConnection
+          if (source === target) {
+            alert('Plz select other nodes!')
+            return
+          }
+          const { edges, save } = get()
+          set(() => ({
+            edges: edges.map(edg =>
+              edg.id === oldEdge.id
+                ? ({ ...edg, ...newConnection })
+                : ({ ...edg })
+            )
+          }))
+          await save({})
+        } catch (err) {
+          console.warn(err)
+        }
       },
       modify: async (element, payload) => {
         const { id } = element
